@@ -64,7 +64,7 @@ const SearchBar = (props) => {
                         placeholder='City, province, or "remote"'
                         beforeText="Where"
                         afterIcon="🔍"
-                        value={state.jobType}
+                        value={state.jobLocation}
                         onChange={onInputChanged}
                     />
                 </InputDiv>
