@@ -12,6 +12,10 @@ export const MainDiv = styled.div`
     justify-content: center;
     align-items: center;
     height: 70px;
+
+    @media screen and (max-width: 768px) {
+      border: none;
+    }
 `;
 
 export const LogoDiv = styled.div`

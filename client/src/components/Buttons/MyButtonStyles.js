@@ -7,9 +7,9 @@ export const AButton = styled.button`
     height: ${props => props.height};
     padding: 5px;
     border: none;
-    border-radius: 5px;
+    border-radius: .5rem;
 
-    @media screen and (max-width: 768px) {
-        width: 101.5%;
-    }
+    // @media screen and (max-width: 768px) {
+    //     width: 101.5%;
+    // }
 `;

@@ -6,8 +6,9 @@ import {
   useRoutes,
   useNavigate
 } from "react-router-dom";
-import { InputDiv, MainDiv, SearchButtonDiv, TextInput } from './SearchBarStyles';
+import { FilterDiv, InputDiv, MainDiv, SearchButtonDiv, TextInput } from './SearchBarStyles';
 import MyButton from '../Buttons/MyButton';
+import Filter from '../Filter/Filter';
 
 const SearchBar = (props) => {
     const [state, setState] = useState({
@@ -72,13 +73,45 @@ const SearchBar = (props) => {
                     <MyButton
                         backgroundColor="#AA4A44"
                         color="#FFFFFF"
-                        text="Find Volunteer Work"
-                        width="200px"
-                        height="62px"
+                        text="Find Work"
+                        width="100%"
+                        height="100%"
                         type="submit"
                     />
                 </SearchButtonDiv>
             </MainDiv>
+            <FilterDiv>
+                <Filter
+                    title="Date Posted"
+                />
+                <Filter
+                    title="Remote"
+                />
+                <Filter
+                    title="Date Posted"
+                />
+                <Filter
+                    title="Remote"
+                />
+                <Filter
+                    title="Date Posted"
+                />
+                <Filter
+                    title="Remote"
+                />
+                <Filter
+                    title="Date Posted"
+                />
+                <Filter
+                    title="Remote"
+                />
+                <Filter
+                    title="Date Posted"
+                />
+                <Filter
+                    title="Remote"
+                />
+            </FilterDiv>
         </form>
     </div>
   )

@@ -6,20 +6,17 @@ import {
   useRoutes,
   useNavigate
 } from "react-router-dom";
-import { AButton } from './MyButtonStyles';
+import { FaCaretDown } from 'react-icons/fa';
+import { MainSelect, Option } from './FilterStyles';
 
 const Filter = (props) => {
   return (
-    <AButton
-      type={props.type}
-      onClick={props.onClick}
-      backgroundColor={props.backgroundColor}
-      color={props.color}
-      width={props.width}
-      height={props.height}
-    >
-      {props.text}
-    </AButton>
+    <MainSelect>
+      <Option value="">{props.title}</Option>
+      <Option value="option1">Option 1</Option>
+      <Option value="option2">Option 2</Option>
+      <Option value="option3">Option 3</Option>
+    </MainSelect>
   )
 }
 
