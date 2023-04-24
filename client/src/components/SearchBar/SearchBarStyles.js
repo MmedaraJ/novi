@@ -17,25 +17,48 @@ export const MainDiv = styled.div`
     }
 `;
 
+export const LabelDiv = styled.div`
+    flex: 1.5;
+    order: 0;
+    justify-content: center;
+    align-items: center;
+`;
+
+export const P = styled.p`
+  text-align: center;
+  font-weight: bold;
+`;
+
 export const TextInput = styled.input`
-    border: 1px solid red;
-    margin-right: 10px;
+    flex: 4;
+    order: 1;
     height: 50%;
-    width: 100%;
-    border-radius: .5rem;
     padding: 5px;
     padding 10px 10px;
     color: black;
+    border: none;
+    margin-left: .2rem;
+    margin-right: .2rem;
+
+    &:focus {
+        outline: none;
+        border: none;
+    }
 `;
 
 export const InputDiv = styled.div`
     flex: 4;
-    width: max;
-    height: 45px;
+    display: flex;
+    width: 100%;
+    height: 35px;
     margin-right: 1.8rem;
+    border: 1px solid red;
+    border-radius: .5rem;
+    margin-right: 10px;
+    padding: 0.25rem;
+    align-items: center;
 
     @media screen and (max-width: 768px) {
-        display: block;
         margin-bottom: 20px;
         margin-right: 1rem;
     }
@@ -59,4 +82,10 @@ export const FilterDiv = styled.div`
     padding-left: 10%;
     padding-right: 10%;
     margin-top: 1.25rem;
+`;
+
+export const IconDiv = styled.div`
+    padding: .25rem;
+    flex: 1;
+    order: 2;
 `;

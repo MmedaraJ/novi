@@ -6,9 +6,10 @@ import {
   useRoutes,
   useNavigate
 } from "react-router-dom";
-import { FilterDiv, InputDiv, MainDiv, SearchButtonDiv, TextInput } from './SearchBarStyles';
+import { FilterDiv, IconDiv, InputDiv, LabelDiv, MainDiv, P, SearchButtonDiv, TextInput } from './SearchBarStyles';
 import MyButton from '../Buttons/MyButton';
 import Filter from '../Filter/Filter';
+import { FaSearch, FaLocationArrow } from 'react-icons/fa';
 
 const SearchBar = (props) => {
     const [state, setState] = useState({
@@ -48,6 +49,7 @@ const SearchBar = (props) => {
         <form onSubmit={onSubmitHandler}>
             <MainDiv>
                 <InputDiv>
+                    <LabelDiv><P>What</P></LabelDiv>
                     <TextInput
                         name='jobType'
                         type='text'
@@ -57,8 +59,10 @@ const SearchBar = (props) => {
                         value={state.jobType}
                         onChange={onInputChanged}
                     />
+                    <IconDiv><FaSearch/></IconDiv>
                 </InputDiv>
                 <InputDiv>
+                    <LabelDiv><P>Where</P></LabelDiv>
                     <TextInput
                         name='jobLocation'
                         type='text'
@@ -68,6 +72,7 @@ const SearchBar = (props) => {
                         value={state.jobLocation}
                         onChange={onInputChanged}
                     />
+                    <IconDiv><FaLocationArrow/></IconDiv>
                 </InputDiv>
                 <SearchButtonDiv>
                     <MyButton
