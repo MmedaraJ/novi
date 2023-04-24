@@ -22,7 +22,6 @@ export const MainSelect = styled.select`
     padding-right: 24px;
     -moz-appearance: none;
     -webkit-appearance: none;
-    appearance: none;
 `;
 
 export const Option = styled.option`
