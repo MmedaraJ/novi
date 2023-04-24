@@ -20,7 +20,7 @@ const NavBar = (props) => {
     };
 
   return (
-    <MainDiv>
+    <MainDiv style={{backgroundColor: "#FFFFFF"}}>
         <LogoDiv>
             <H1>LOGO</H1>
         </LogoDiv>

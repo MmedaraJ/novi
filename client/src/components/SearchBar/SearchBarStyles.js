@@ -7,14 +7,16 @@ export const MainDiv = styled.div`
     justify-content: space-between;
     align-items: center;
     height: 45px;
-    margin-top: .75rem;
+    margin-top: 1.5rem;
+    background-color: white;
 
     @media screen and (max-width: 768px) {
         display: block;
         padding-top: .5rem;
-        padding-bottom: 1rem;
+        padding-bottom: 0rem;
         height: fit-content;
         justify-content: center;
+        margin-top: 0rem;
     }
 `;
 
@@ -110,7 +112,7 @@ export const SearchButtonDiv = styled.div`
 
     @media screen and (max-width: 768px) {
         margin: 0px;
-        display: block;
+        display: none;
         width: 100%;
         height: 40px;
         align-items: center;
@@ -124,6 +126,11 @@ export const FilterDiv = styled.div`
     padding-left: 10%;
     padding-right: 10%;
     margin-top: 1.25rem;
+    overflow-x: auto;
+
+    @media screen and (max-width: 768px) {
+        margin-top: 0rem;
+    }
 `;
 
 export const IconDiv = styled.div`

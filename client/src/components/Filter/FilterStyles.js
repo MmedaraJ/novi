@@ -2,13 +2,13 @@ import styled from "styled-components";
 import { FaCaretDown } from 'react-icons/fa';
 
 export const MainSelect = styled.select`
-    background-color: #EBECF0;
+    background-color: #FFFFFF;
     padding: 12px;
     padding-left: 10px
     padding-right: 20px;
     height: 40px;
     border-radius: .5rem;
-    border: none;
+    border: black solid 1px;
     margin-right: 7px;
     margin-bottom: 6px;
     color: black;
@@ -22,6 +22,10 @@ export const MainSelect = styled.select`
     padding-right: 24px;
     -moz-appearance: none;
     -webkit-appearance: none;
+
+    &:focus {
+      outline: none;
+    }
 `;
 
 export const Option = styled.option`

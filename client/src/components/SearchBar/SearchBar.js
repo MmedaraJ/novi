@@ -46,10 +46,11 @@ const SearchBar = (props) => {
 
     const onSubmitHandler = (e) => {
         e.preventDefault();
+        console.log("enter pressed");
     }
 
   return (
-    <div>
+    <div style={{backgroundColor: "#FFFFFF"}}>
         <form onSubmit={onSubmitHandler}>
             <MainDiv>
                 <InputDiv>
@@ -94,27 +95,6 @@ const SearchBar = (props) => {
                 />
                 <Filter
                     title="Date Posted"
-                />
-                <Filter
-                    title="Remote"
-                />
-                <Filter
-                    title="Date Posted"
-                />
-                <Filter
-                    title="Remote"
-                />
-                <Filter
-                    title="Date Posted"
-                />
-                <Filter
-                    title="Remote"
-                />
-                <Filter
-                    title="Date Posted"
-                />
-                <Filter
-                    title="Remote"
                 />
             </FilterDiv>
         </form>
