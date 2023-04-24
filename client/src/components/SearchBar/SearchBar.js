@@ -6,7 +6,11 @@ import {
   useRoutes,
   useNavigate
 } from "react-router-dom";
-import { FilterDiv, IconDiv, InputDiv, LabelDiv, MainDiv, P, SearchButtonDiv, TextInput } from './SearchBarStyles';
+import { 
+    FilterDiv, IconDiv, InputDiv, MainDiv, P, 
+    SearchButtonDiv, TextInput, LocationIconDiv,
+    TitleInputDiv, LocationInputDiv 
+} from './SearchBarStyles';
 import MyButton from '../Buttons/MyButton';
 import Filter from '../Filter/Filter';
 import { FaSearch, FaLocationArrow } from 'react-icons/fa';
@@ -49,36 +53,32 @@ const SearchBar = (props) => {
         <form onSubmit={onSubmitHandler}>
             <MainDiv>
                 <InputDiv>
-                    <LabelDiv><P>What</P></LabelDiv>
-                    <TextInput
-                        name='jobType'
-                        type='text'
-                        placeholder='Job title, keywords, or company'
-                        beforeText="What"
-                        afterIcon="🔍"
-                        value={state.jobType}
-                        onChange={onInputChanged}
-                    />
-                    <IconDiv><FaSearch/></IconDiv>
-                </InputDiv>
-                <InputDiv>
-                    <LabelDiv><P>Where</P></LabelDiv>
-                    <TextInput
-                        name='jobLocation'
-                        type='text'
-                        placeholder='City, province, or "remote"'
-                        beforeText="Where"
-                        afterIcon="🔍"
-                        value={state.jobLocation}
-                        onChange={onInputChanged}
-                    />
-                    <IconDiv><FaLocationArrow/></IconDiv>
+                    <TitleInputDiv>
+                        <IconDiv><FaSearch/></IconDiv>
+                        <TextInput
+                            name='jobType'
+                            type='text'
+                            placeholder='Keywords'
+                            value={state.jobType}
+                            onChange={onInputChanged}
+                        />
+                    </TitleInputDiv>
+                    <LocationInputDiv>
+                        <LocationIconDiv><FaLocationArrow/></LocationIconDiv>
+                        <TextInput
+                            name='jobLocation'
+                            type='text'
+                            placeholder='Location'
+                            value={state.jobLocation}
+                            onChange={onInputChanged}
+                        />
+                    </LocationInputDiv>
                 </InputDiv>
                 <SearchButtonDiv>
                     <MyButton
-                        backgroundColor="#AA4A44"
+                        backgroundColor="#000000"
                         color="#FFFFFF"
-                        text="Find Work"
+                        text="Search"
                         width="100%"
                         height="100%"
                         type="submit"

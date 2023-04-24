@@ -1,12 +1,12 @@
 import styled from "styled-components";
 
 export const H1 = styled.h1`
-    color: red;
+    color: black;
 `;
 
 export const MainDiv = styled.div`
     display: flex;
-    border-bottom: 1px solid gray;
+    border-bottom: 1px solid black;
     padding-left: 1%;
     padding-right: 1%;
     justify-content: center;
@@ -21,6 +21,10 @@ export const MainDiv = styled.div`
 export const LogoDiv = styled.div`
     flex: 1;
     height: max;
+
+    @media screen and (max-width: 768px) {
+      margin-left: 20px;
+    }
 `;
 
 export const ItemsDiv = styled.div`
@@ -39,7 +43,7 @@ export const ItemsDiv = styled.div`
 
 export const EmployerDiv = styled.div`
     flex: 1;
-    border-left: 1px solid gray;
+    border-left: 1px solid black;
     height: max;
 
     @media screen and (max-width: 768px) {
@@ -52,13 +56,11 @@ export const VolunteerDiv = styled.div`
     height: max;
 
     &:hover{
-        border-bottom: red 2px solid;
-        padding: 1%;
+      font-weight: bold;
     }
 
     &:active{
-        border-bottom: red 2px solid;
-        padding: 1%;
+      font-weight: bold;
     }
 `;
 
@@ -67,18 +69,17 @@ export const SignInDiv = styled.div`
     height: max;
 
     &:hover{
-        border-bottom: red 2px solid;
-        padding: 1%;
+      font-weight: bold;
     }
 
     &:active{
-        border-bottom: red 2px solid;
-        padding: 1%;
+      font-weight: bold;
     }
 `;
 
 export const P = styled.p`
   text-align: center;
+  font-size: small;
 `;
 
 export const Menu = styled.div`
