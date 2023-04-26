@@ -16,6 +16,7 @@ import SearchBar from '../../components/SearchBar/SearchBar';
 
 const Home = (props) => {
   const [isVisible, setIsVisible] = useState(false);
+  const navigate = useNavigate();
 
   const handleScroll = () => {
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
@@ -31,9 +32,20 @@ const Home = (props) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const navToSignIn = () => {
+      navigate('/signin');
+  } 
+
+  const navToHome = () => {
+      navigate('/');
+  } 
+
   return (
     <div>
-      <NavBar></NavBar>
+      <NavBar
+        navToSignIn={navToSignIn}
+        navToHome={navToHome}
+      ></NavBar>
       <SearchBar></SearchBar>
       <br></br>
       <br></br>

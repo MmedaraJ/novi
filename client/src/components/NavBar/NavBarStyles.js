@@ -99,18 +99,19 @@ export const Menu = styled.div`
     transform: ${({ showMenu }) => (showMenu ? 'translateX(0)' : `translateX(100%)`)};
     right: ${({ showMenu }) => (showMenu ? '0' : '220px')};
 
-    @media screen and (min-width: 768px) {
-        display: ${({ showMenu }) => (showMenu ? 'flex' : 'none')};
-        flex-direction: row;
-        justify-content: flex-end;
-        align-items: center;
-        position: static;
-        background-color: transparent;
-        box-shadow: none;
-        width: auto;
-        padding: 0;
-        transform: translateX(0);
-        right: 0;
+    @media screen and (min-width: 769px) {
+      display: none;
+        // display: ${({ showMenu }) => (showMenu ? 'flex' : 'none')};
+        // flex-direction: row;
+        // justify-content: flex-end;
+        // align-items: center;
+        // position: static;
+        // background-color: transparent;
+        // box-shadow: none;
+        // width: auto;
+        // padding: 0;
+        // transform: translateX(0);
+        // right: 0;
     }
 `;
 
@@ -118,7 +119,7 @@ export const MenuItem = styled.div`
   margin: 10px;
   cursor: pointer;
   
-  @media screen and (min-width: 768px) {
+  @media screen and (min-width: 769px) {
     display: none;
   }
 `;

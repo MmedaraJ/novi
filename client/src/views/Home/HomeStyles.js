@@ -4,10 +4,6 @@ export const H1 = styled.h1`
     color: red;
 `;
 
-export const RandDiv = styled.div`
-    width: 100%;
-`;
-
 export const ScrollToTopButton = styled.button`
     position: fixed;
     bottom: 20px;
