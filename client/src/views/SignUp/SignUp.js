@@ -9,10 +9,9 @@ import {
 } from "react-router-dom";
 import { 
     Error, FileInput, FirstNameDiv, InputDiv, LabelDiv, LastNameDiv, 
-    MainDiv, MainSelect, NamesDiv, Option, P, RandTextDiv, SearchButtonDiv, SelectedFile, TextInput, UploadButton 
+    MainDiv, MainSelect, NamesDiv, Option, P, RandTextDiv, SearchButtonDiv, 
+    SelectedFile, TextInput, UploadButton 
 } from './SignUpStyles';
-import { Input } from 'react-phone-number-input';
-import 'react-phone-number-input/style.css';
 import NavBar from '../../components/NavBar/NavBar';
 import MyButton from '../../components/Buttons/MyButton';
 
@@ -24,6 +23,7 @@ const SignUp = (props) => {
         phoneNumber: "",
         password: "",
         confirmPassword: "",
+        resumeId: ""
     });
     const [errors, setErrors] = useState({
         firstName: "",
@@ -32,9 +32,10 @@ const SignUp = (props) => {
         phoneNumber: "",
         password: "",
         confirmPassword: "",
-        resume: ""
+        resumeId: ""
     });
     const [success, setSuccess] = useState("");
+    const [selectedFileName, setSelectedFileName] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
     const navigate = useNavigate();
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -49,6 +50,13 @@ const SignUp = (props) => {
         handleFileNameLengthOnWindowSizeChange();
     }, [windowWidth]);
 
+    useEffect(() => {
+        localStorage.setItem('signUpData', JSON.stringify(state));
+        const formData = new FormData();
+        formData.append("file", selectedFile);
+        localStorage.setItem('selectedFile', JSON.stringify(formData));
+    }, [state, selectedFile]);
+
     const onInputChanged = (e) => {
         let firstName = state.firstName;
         let lastName = state.lastName;
@@ -56,6 +64,7 @@ const SignUp = (props) => {
         let phoneNumber = state.phoneNumber;
         let password = state.password;
         let confirmPassword = state.confirmPassword;
+        let resumeId = state.resumeId;
 
         const name = e.target.name;
         const value = e.target.value;
@@ -83,7 +92,7 @@ const SignUp = (props) => {
         }
 
         if(success.length > 0){setSuccess("");}
-        if(errors.length > 0){setErrors([]);}
+        setErrors({});
 
         setState({
             firstName: firstName,
@@ -92,6 +101,7 @@ const SignUp = (props) => {
             phoneNumber: phoneNumber,
             password: password,
             confirmPassword: confirmPassword,
+            resumeId: resumeId,
         });
     }
 
@@ -105,6 +115,9 @@ const SignUp = (props) => {
 
     function handleFileUpload(event) {
         const file = event.target.files[0];
+        setSelectedFile(file? file: null);
+        //selectedFile = file? file: null;
+        console.log(selectedFile);
         let fileName = file? file.name: null;
         if(fileName){
             if(windowWidth >= 2560) fileName = fileName.substring(0, 251);
@@ -116,23 +129,92 @@ const SignUp = (props) => {
             else if(windowWidth >= 320) fileName = fileName.substring(0, 40);
             else if(windowWidth < 320) fileName = fileName.substring(0, 20);
         }
-        setSelectedFile(fileName);
+        setSelectedFileName(fileName);
     }
 
     function handleFileNameLengthOnWindowSizeChange(){
-        if(windowWidth >= 2560) setSelectedFile(selectedFile? selectedFile.substring(0, 251): null);
-        else if(windowWidth >= 1440) setSelectedFile(selectedFile? selectedFile.substring(0, 120): null);
-        else if(windowWidth >= 1024) setSelectedFile(selectedFile? selectedFile.substring(0, 80): null);
-        else if(windowWidth > 768 && windowWidth < 909) setSelectedFile(selectedFile? selectedFile.substring(0, 50): null);
-        else if(windowWidth > 431) setSelectedFile(selectedFile? selectedFile.substring(0, 60): null);
-        else if(windowWidth >= 375) setSelectedFile(selectedFile? selectedFile.substring(0, 50): null);
-        else if(windowWidth >= 320) setSelectedFile(selectedFile? selectedFile.substring(0, 40): null);
-        else if(windowWidth < 320) setSelectedFile(selectedFile? selectedFile.substring(0, 20): null);
+        if(windowWidth >= 2560) setSelectedFileName(selectedFileName? selectedFileName.substring(0, 251): null);
+        else if(windowWidth >= 1440) setSelectedFileName(selectedFileName? selectedFileName.substring(0, 120): null);
+        else if(windowWidth >= 1024) setSelectedFileName(selectedFileName? selectedFileName.substring(0, 80): null);
+        else if(windowWidth > 768 && windowWidth < 909) setSelectedFileName(selectedFileName? selectedFileName.substring(0, 50): null);
+        else if(windowWidth > 431) setSelectedFileName(selectedFileName? selectedFileName.substring(0, 60): null);
+        else if(windowWidth >= 375) setSelectedFileName(selectedFileName? selectedFileName.substring(0, 50): null);
+        else if(windowWidth >= 320) setSelectedFileName(selectedFileName? selectedFileName.substring(0, 40): null);
+        else if(windowWidth < 320) setSelectedFileName(selectedFileName? selectedFileName.substring(0, 20): null);
     }
 
-    const onSubmitHandler = (e) => {
+    const uploadFileToGridFs = (e) => {
         e.preventDefault();
-        console.log("enter pressed");
+        const formData = new FormData();
+        formData.append("file", selectedFile);
+        console.log(`selectedFile:::::___ ${selectedFile}`);
+
+        if(selectedFile){
+            axios.post(
+                "http://localhost:8000/api/upload", 
+                formData
+            ).then((response) => {
+                console.log(response.data);
+                const fileId = response.data.file.id;
+                console.log(`File uploaded with ID ${fileId}`);
+                if(fileId){
+                    setState({
+                        firstName: state.firstName,
+                        lastName: state.lastName,
+                        email: state.email,
+                        phoneNumber: state.phoneNumber,
+                        password: state.password,
+                        confirmPassword: state.confirmPassword,
+                        resumeId: fileId,
+                    });
+                }
+                onSubmitHandler();
+            }).catch(err => console.log(err));
+        }else{
+            onSubmitHandler();
+        }
+    };
+
+    const onSubmitHandler = () => {
+        axios.post(
+            "http://localhost:8000/api/user/create", 
+            {
+                firstName: state.firstName,
+                lastName: state.lastName,
+                email: state.email,
+                phoneNumber: state.phoneNumber,
+                password: state.password,
+                confirmPassword: state.confirmPassword,
+                resumeId: state.resumeId,
+            },
+            { withCredentials: true },
+        ).then(res => {
+            console.log(res);
+            setState({
+                firstName: "",
+                lastName: "",
+                email: "",
+                phoneNumber: "",
+                password: "",
+                confirmPassword: "",
+                resumeId: "",
+            });
+            setSuccess(res.data.msg);
+            localStorage.setItem('usertoken', JSON.stringify(res.data.token));
+            localStorage.setItem('userId', JSON.stringify(res.data.user._id));
+            navToHome();
+        }).catch(err => {
+            console.log(err);
+            const errorArr = {};
+            const errorResponse = err.response.data.errors;
+
+            if(errorResponse){
+                for(const key of Object.keys(errorResponse)){
+                    errorArr[key] = errorResponse[key].message;
+                }
+            }
+            setErrors(errorArr);
+        });
     }
 
     return(
@@ -147,7 +229,7 @@ const SignUp = (props) => {
                 <RandTextDiv>
                     <P>Create an account or <u onClick={navToSignIn}><b>sign in</b></u></P>
                 </RandTextDiv>
-                <form onSubmit={onSubmitHandler}>
+                <form onSubmit={uploadFileToGridFs}>
                     <NamesDiv>
                         <FirstNameDiv>
                             <InputDiv
@@ -268,15 +350,23 @@ const SignUp = (props) => {
                         <FirstNameDiv>
                             <label htmlFor="file-upload">
                                 <InputDiv
-                                    borderColor={errors.resume? 'red': '#000000'}
+                                    borderColor={errors.resumeId? 'red': '#000000'}
                                 >
                                     <UploadButton 
                                         htmlFor="file-upload"
-                                        borderColor={errors.resume? 'red': '#000000'}
+                                        borderColor={errors.resumeId? 'red': '#000000'}
                                     >
                                         <P>Resume</P>
                                     </UploadButton>
-                                    <SelectedFile><P>{selectedFile}</P></SelectedFile>
+                                    <SelectedFile>
+                                        <P>
+                                            {
+                                                selectedFileName?
+                                                selectedFileName:
+                                                (<span style={{color: "gray"}}>Optional</span>)
+                                            }
+                                        </P>
+                                    </SelectedFile>
                                     <FileInput
                                         id="file-upload"
                                         type="file"
@@ -286,7 +376,7 @@ const SignUp = (props) => {
                                 </InputDiv>
                             </label>
                             <LabelDiv>
-                                {errors.resume && <Error>{errors.resume}</Error>}
+                                {errors.resumeId && <Error>{errors.resumeId}</Error>}
                             </LabelDiv>
                         </FirstNameDiv>
                         <LastNameDiv>
