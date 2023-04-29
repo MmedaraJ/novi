@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import 'react-phone-number-input/style.css'
+import PhoneInput from 'react-phone-number-input'
 
 export const MainDiv = styled.div`
     background-color: #FFFFFF;
@@ -174,4 +176,25 @@ export const SearchButtonDiv = styled.div`
     width: 100%;
     height: 45px;
     align-items: center;
+`;
+
+export const MyPhoneInput = styled(PhoneInput)`
+    padding: 5px;
+    padding: 10px 10px;
+    color: black;
+    border: none;
+    flex: 1;
+    width: 100%;
+
+    &:focus {
+        outline: none;
+        border: white;
+    }
+
+    & *{
+        &:focus {
+            outline: none;
+            border: white;
+        }
+    }
 `;

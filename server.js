@@ -1,4 +1,5 @@
 const express = require('express');
+const session = require('express-session');
 const app = express();
 const cors = require('cors');
 const port = 8000;
@@ -17,10 +18,17 @@ app.use(cors({
     credentials: true, 
     origin: 'http://localhost:3000',
     optionsSuccessStatus: 200
-    
 }));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+app.use(
+  session({
+    secret: process.env.SECRET_KEY,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }, // Set to true if using HTTPS
+  })
+);
 
 require('./server/routes/user.routes')(app);
 

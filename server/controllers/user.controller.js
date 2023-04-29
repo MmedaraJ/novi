@@ -1,6 +1,9 @@
 const { User: User } = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
+const twilio = require('twilio');
+const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+
 require('dotenv').config();
 
 module.exports.createUser = (request, response) => {
@@ -107,4 +110,44 @@ module.exports.deleteAllUsers = (request, response) => {
 module.exports.logout = (request, response) => {
     res.clearCookie('usertoken');
     res.sendStatus(200);
+}
+
+module.exports.sendPhoneNumberConfirmationCode = async(req, res) => {
+    try {
+        // Generate a random 6-digit confirmation code
+        const confirmationCode = Math.floor(100000 + Math.random() * 900000);
+        req.session.confirmationCode = confirmationCode;
+    
+        // Send the confirmation code to the user's phone number via SMS
+        const message = await client.messages.create({
+          body: `Your confirmation code is ${confirmationCode}`,
+          from: process.env.TWILIO_PHONE_NUMBER,
+          to: req.body.phoneNumber
+        });
+    
+        // Return a success response
+        res.json({ success: true });
+    } catch (error) {
+        // Return an error response
+        res.status(500).json({ error: error.message });
+    }
+}
+
+module.exports.verifyPhoneNumberConfirmationCode = async(req, res) => {
+    try {
+        // Check if the confirmation code is correct
+        if (req.body.confirmationCode === req.session.confirmationCode) {
+          // Clear the confirmation code from the session
+          delete req.session.confirmationCode;
+    
+          // Return a success response
+          res.json({ success: true });
+        } else {
+          // Return an error response
+          res.status(401).json({ error: 'Invalid confirmation code' });
+        }
+    } catch (error) {
+        // Return an error response
+        res.status(500).json({ error: error.message });
+    }
 }

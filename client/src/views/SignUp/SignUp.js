@@ -9,7 +9,7 @@ import {
 } from "react-router-dom";
 import { 
     Error, FileInput, FirstNameDiv, InputDiv, LabelDiv, LastNameDiv, 
-    MainDiv, MainSelect, NamesDiv, Option, P, RandTextDiv, SearchButtonDiv, 
+    MainDiv, MainSelect, MyPhoneInput, NamesDiv, Option, P, RandTextDiv, SearchButtonDiv, 
     SelectedFile, TextInput, UploadButton 
 } from './SignUpStyles';
 import NavBar from '../../components/NavBar/NavBar';
@@ -20,11 +20,11 @@ const SignUp = (props) => {
         firstName: "",
         lastName: "",
         email: "",
-        phoneNumber: "",
         password: "",
         confirmPassword: "",
         resumeId: ""
     });
+    const [phoneNumber, setPhoneNumber] = useState("");
     const [errors, setErrors] = useState({
         firstName: "",
         lastName: "",
@@ -39,6 +39,7 @@ const SignUp = (props) => {
     const [selectedFile, setSelectedFile] = useState(null);
     const navigate = useNavigate();
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+    const [confirmationCodeSent, setConfirmationCodeSent] = useState(false);
 
     useEffect(() => {
       const handleResize = () => setWindowWidth(window.innerWidth);
@@ -51,17 +52,30 @@ const SignUp = (props) => {
     }, [windowWidth]);
 
     useEffect(() => {
-        localStorage.setItem('signUpData', JSON.stringify(state));
-        const formData = new FormData();
-        formData.append("file", selectedFile);
-        localStorage.setItem('selectedFile', JSON.stringify(formData));
-    }, [state, selectedFile]);
+        if(phoneNumber != "") localStorage.setItem('phoneNumber', JSON.stringify(phoneNumber));
+    }, [phoneNumber]);
+
+    useEffect(() => {
+        if(confirmationCodeSent) navToPhoneNumberVerification();
+    }, [confirmationCodeSent]);
+
+    const handlePhoneChange = (value) => {
+        setPhoneNumber(value);
+    };
+
+    const sendConfirmationCode = async () => {
+        try {
+          await axios.post('http://localhost:8000/api/send-code', { phoneNumber });
+          setConfirmationCodeSent(true);
+        } catch (error) {
+          console.log(error);
+        }
+    };
 
     const onInputChanged = (e) => {
         let firstName = state.firstName;
         let lastName = state.lastName;
         let email = state.email;
-        let phoneNumber = state.phoneNumber;
         let password = state.password;
         let confirmPassword = state.confirmPassword;
         let resumeId = state.resumeId;
@@ -79,9 +93,6 @@ const SignUp = (props) => {
             case "email":
                 email = value;
                 break;
-            case "phoneNumber":
-                phoneNumber = value;
-                break;
             case "password":
                 password = value;
                 break;
@@ -98,12 +109,15 @@ const SignUp = (props) => {
             firstName: firstName,
             lastName: lastName,
             email: email,
-            phoneNumber: phoneNumber,
             password: password,
             confirmPassword: confirmPassword,
             resumeId: resumeId,
         });
     }
+
+    const navToPhoneNumberVerification = () => {
+        navigate('/phoneNumberVerification');
+    } 
 
     const navToSignIn = () => {
         navigate('/signin');
@@ -116,7 +130,6 @@ const SignUp = (props) => {
     function handleFileUpload(event) {
         const file = event.target.files[0];
         setSelectedFile(file? file: null);
-        //selectedFile = file? file: null;
         console.log(selectedFile);
         let fileName = file? file.name: null;
         if(fileName){
@@ -162,30 +175,29 @@ const SignUp = (props) => {
                         firstName: state.firstName,
                         lastName: state.lastName,
                         email: state.email,
-                        phoneNumber: state.phoneNumber,
                         password: state.password,
                         confirmPassword: state.confirmPassword,
                         resumeId: fileId,
                     });
                 }
-                onSubmitHandler();
+                onSubmitHandler(fileId);
             }).catch(err => console.log(err));
         }else{
             onSubmitHandler();
         }
     };
 
-    const onSubmitHandler = () => {
+    const onSubmitHandler = (fileId) => {
         axios.post(
             "http://localhost:8000/api/user/create", 
             {
                 firstName: state.firstName,
                 lastName: state.lastName,
                 email: state.email,
-                phoneNumber: state.phoneNumber,
+                phoneNumber: phoneNumber,
                 password: state.password,
                 confirmPassword: state.confirmPassword,
-                resumeId: state.resumeId,
+                resumeId: fileId,
             },
             { withCredentials: true },
         ).then(res => {
@@ -194,15 +206,15 @@ const SignUp = (props) => {
                 firstName: "",
                 lastName: "",
                 email: "",
-                phoneNumber: "",
                 password: "",
                 confirmPassword: "",
                 resumeId: "",
             });
+            setPhoneNumber("");
             setSuccess(res.data.msg);
             localStorage.setItem('usertoken', JSON.stringify(res.data.token));
             localStorage.setItem('userId', JSON.stringify(res.data.user._id));
-            navToHome();
+            sendConfirmationCode();
         }).catch(err => {
             console.log(err);
             const errorArr = {};
@@ -288,21 +300,11 @@ const SignUp = (props) => {
                             <InputDiv
                                 borderColor={errors.phoneNumber? 'red': '#000000'}
                             >
-                                <MainSelect
-                                    borderColor={errors.phoneNumber? 'red': '#000000'}
-                                >
-                                    <Option value="">Code</Option>
-                                    <Option value="option1">+1</Option>
-                                    <Option value="option2">+234</Option>
-                                    <Option value="option3">+23455</Option>
-                                </MainSelect>
-                                <TextInput
+                                <MyPhoneInput
                                     required
-                                    name='phoneNumber'
-                                    type='phoneNumber'
                                     placeholder='Phone Number'
-                                    value={state.phoneNumber}
-                                    onChange={onInputChanged}
+                                    value={phoneNumber}
+                                    onChange={handlePhoneChange}
                                 />
                             </InputDiv>
                             <LabelDiv>

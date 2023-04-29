@@ -48,7 +48,7 @@ const SignIn = (props) => {
         }
 
         if(success.length > 0){setSuccess("");}
-        if(errors.length > 0){setErrors([]);}
+        setErrors({});
 
         setState({
             email: email,

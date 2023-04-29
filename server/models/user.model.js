@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const uniqueValidator = require('mongoose-unique-validator');
 const EMAIL_REGEX = /^([\w-\.]+@([\w-]+\.)+[\w-]+)?$/;
-const PHONE_NUMBER_REGEX = /^(\+\d{1,3}\s)?\d{10}$/;
+const PHONE_NUMBER_REGEX = /^\+?[1-9][0-9]{7,14}$/;
 const SALT_WORK_FACTOR = 10;
 
 function emailValidation(val){
