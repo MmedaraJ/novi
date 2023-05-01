@@ -8,4 +8,5 @@ module.exports = function(app){
     app.get('/api/users/delete', UserController.deleteAllUsers);
     app.post('/api/send-code', UserController.sendPhoneNumberConfirmationCode);
     app.post('/api/verify-code', UserController.verifyPhoneNumberConfirmationCode);
+    app.post('/api/updatePhoneNumberVerified', UserController.updatePhoneNumberVerifiedForUser);
 }

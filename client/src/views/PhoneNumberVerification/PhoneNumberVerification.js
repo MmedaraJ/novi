@@ -33,9 +33,31 @@ const PhoneNumberVerification = (props) => {
     useEffect(() => {
         if(phoneNumberVerified){
             setSuccess("Successful verification");
-            navToHome();
+            localStorage.removeItem('phoneNumber');
+            updatePhoneNumberVerifiedForUser();
         }
     }, [phoneNumberVerified]);
+
+    useEffect(() => {
+        if(confirmationCodeSent){
+            setSuccess(`Code sent to ${localStorage.getItem('phoneNumber')}`);
+        }
+    }, [confirmationCodeSent]);
+
+    const updatePhoneNumberVerifiedForUser = () => {
+        axios.post(
+            'http://localhost:8000/api/updatePhoneNumberVerified',
+            {
+                userId: localStorage.getItem('userId')
+            },
+            {withCredentials: true}
+        ).then(res => {
+            console.log(res);
+            navToHome();
+        }).catch(err => {
+            console.log(err);
+        });
+    }
 
     const onInputChanged = (e) => {
         let code = state.code;
@@ -66,31 +88,35 @@ const PhoneNumberVerification = (props) => {
         navigate('/');
     } 
 
-    const verifyConfirmationCode = async () => {
-        try {
-          await axios.post(
+    const verifyConfirmationCode = () => {
+        axios.post(
             'http://localhost:8000/api/verify-code', 
-            { confirmationCode: state.code }
-        );
-          setPhoneNumberVerified(true);
-        } catch (error) {
+            { 
+                phoneNumber: localStorage.getItem('phoneNumber'),
+                confirmationCode: state.code 
+            }
+        ).then(res => {
+            setPhoneNumberVerified(true);
+        }).catch(error => {
             console.log(error);
             const e = error.response.data.error;
             setErrors({code: e});
-        }
+        });
     };
 
     const sendConfirmationCode = async () => {
         const phoneNumber = localStorage.getItem('phoneNumber');
         if(phoneNumber){
-            try {
-              await axios.post('http://localhost:8000/api/send-code', { phoneNumber });
-              setConfirmationCodeSent(true);
-            } catch (error) {
-              console.log(error);
-              //TODO navigate to profile page
-              navToHome();
-            }
+            axios.post(
+                'http://localhost:8000/api/send-code', 
+                { phoneNumber }
+            ).then(res => {
+                setConfirmationCodeSent(true);
+            }).catch(error => {
+                console.log(error);
+                //TODO navigate to profile page
+                navToHome();
+            });
         }else{
             //TODO navigate to profile page
             navToHome();
@@ -112,13 +138,13 @@ const PhoneNumberVerification = (props) => {
             <br></br>
             <MainDiv>
                 <RandTextDiv>
-                    <P>Enter the code that was sent to your phone number</P>
+                    <P>Enter the code that was sent to {localStorage.getItem('phoneNumber')}</P>
                 </RandTextDiv>
                 <form onSubmit={onSubmitHandler}>
                     <NamesDiv>
                         <FirstNameDiv>
                             <InputDiv
-                                borderColor={errors.email? 'red': '#000000'}
+                                borderColor={errors.code? 'red': '#000000'}
                             >
                                 <TextInput
                                     required
@@ -147,10 +173,10 @@ const PhoneNumberVerification = (props) => {
                         </LastNameDiv>
                     </NamesDiv>
                 </form>
-                <P><u onClick={sendConfirmationCode}>Resend code</u></P>
+                {success && <Success>{success}</Success>}
+                <P onClick={sendConfirmationCode}><u>Resend code</u></P>
                 {/* Nav to profile page */}
                 <P onClick={navToHome}><u>Change phone number</u></P>
-                {success && <Success>{success}</Success>}
             </MainDiv>
         </div>
     )

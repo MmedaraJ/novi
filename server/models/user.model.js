@@ -49,12 +49,14 @@ const UserSchema = new mongoose.Schema({
             true,
             "Phone number is required"
         ],
-        unique: true,
         trim: true,
         validate: {
             validator: val => phoneNumberValidation(val),
             message: "Please enter a valid phone number"
         }
+    },
+    phoneNumberVerified: { 
+        type: Boolean
     },
     password: { 
         type: String,
@@ -62,13 +64,19 @@ const UserSchema = new mongoose.Schema({
             true,
             "Password is required"
         ],
-        unique: true,
         trim: true,
         minlength: [5, "Password must be at least 5 characters"]
     },
     resumeId: { 
         type: String,
-        unique: true,
+        trim: true,
+    },
+    googleSignInId: { 
+        type: String,
+        trim: true,
+    },
+    facebookSignInId: { 
+        type: String,
         trim: true,
     },
 }, { timestamps: true });

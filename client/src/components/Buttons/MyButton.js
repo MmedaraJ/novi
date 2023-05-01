@@ -18,7 +18,8 @@ const MyButton = (props) => {
       width={props.width}
       height={props.height}
     >
-      {props.text}
+      {props.icon && (<span style={{marginRight:'8px'}}>{props.icon}</span>)}
+      <span>{props.text}</span>
     </AButton>
   )
 }

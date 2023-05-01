@@ -12,9 +12,11 @@ module.exports.createUser = (request, response) => {
         lastName,
         email,
         phoneNumber,
+        phoneNumberVerified,
         password,
         confirmPassword,
-        resumeId
+        resumeId,
+        googleSignInId
     } = request.body;
 
     User.create({
@@ -22,9 +24,11 @@ module.exports.createUser = (request, response) => {
         lastName,
         email,
         phoneNumber,
+        phoneNumberVerified,
         password,
         confirmPassword,
-        resumeId
+        resumeId,
+        googleSignInId
     })
         .then(user => {
             logUserInAfterRegistration(user, request, response);
@@ -113,41 +117,50 @@ module.exports.logout = (request, response) => {
 }
 
 module.exports.sendPhoneNumberConfirmationCode = async(req, res) => {
-    try {
-        // Generate a random 6-digit confirmation code
-        const confirmationCode = Math.floor(100000 + Math.random() * 900000);
-        req.session.confirmationCode = confirmationCode;
-    
-        // Send the confirmation code to the user's phone number via SMS
-        const message = await client.messages.create({
-          body: `Your confirmation code is ${confirmationCode}`,
-          from: process.env.TWILIO_PHONE_NUMBER,
-          to: req.body.phoneNumber
+    client.verify.v2.services(process.env.TWILIO_SERVICE_ID)
+        .verifications
+        .create({
+            to: req.body.phoneNumber,
+            channel: 'sms'
+        })
+        .then(verification => {
+            console.log(verification.status);
+            res.json({success: true})
+        })
+        .catch(error => {
+            console.log(error);
+            res.status(500).json({ error: error.message });
         });
-    
-        // Return a success response
-        res.json({ success: true });
-    } catch (error) {
-        // Return an error response
-        res.status(500).json({ error: error.message });
-    }
 }
 
 module.exports.verifyPhoneNumberConfirmationCode = async(req, res) => {
-    try {
-        // Check if the confirmation code is correct
-        if (req.body.confirmationCode === req.session.confirmationCode) {
-          // Clear the confirmation code from the session
-          delete req.session.confirmationCode;
-    
-          // Return a success response
-          res.json({ success: true });
-        } else {
-          // Return an error response
-          res.status(401).json({ error: 'Invalid confirmation code' });
-        }
-    } catch (error) {
-        // Return an error response
-        res.status(500).json({ error: error.message });
-    }
+    client.verify.v2.services(process.env.TWILIO_SERVICE_ID)
+        .verificationChecks
+        .create({
+            to: req.body.phoneNumber, 
+            code: req.body.confirmationCode
+        })
+        .then(verification_check => {
+            const status = verification_check.status
+            console.log(status);
+            res.json({ success: status=='approved'? true: false })
+        })
+        .catch(error => {
+            console.log(error);
+            res.status(500).json({ error: error.message });
+        });
+}
+
+module.exports.updatePhoneNumberVerifiedForUser = async(req, res) => {
+    const userId = req.body.userId;
+    User.findByIdAndUpdate(
+        userId,
+        {phoneNumberVerified: true},
+        {new: true}
+    ).then(updatedUser => {
+        console.log(`User with ID ${userId} updated successfully.`);
+        console.log(updatedUser);
+    }).catch(error => {
+        console.error(`Error updating user with ID ${userId}: ${error}`);
+    });
 }
