@@ -74,6 +74,17 @@ export const InputDiv = styled.div`
     align-items: center;
 `;
 
+export const CenterInputDiv = styled.div`
+    display: flex;
+    height: 35px;
+    width: 100%;
+    border: 1px solid;
+    border-color: ${props => props.borderColor};
+    border-radius: .5rem;
+    padding: 0.25rem;
+    align-items: center;
+`;
+
 export const TextInput = styled.input`
     padding: 5px;
     padding 10px 10px;
@@ -176,6 +187,25 @@ export const SearchButtonDiv = styled.div`
     width: 100%;
     height: 45px;
     align-items: center;
+`;
+
+export const GoogleButtonDiv = styled.div`
+    width: 50%;
+    height: 45px;
+    align-items: center;
+    justify-content: center;
+
+    @media screen and (max-width: 768px) {
+        width: 100%;
+    }
+`;
+
+export const ButtonDiv = styled.div`
+    display: flex;
+    width: 100%;
+    height: 45px;
+    align-items: center;
+    justify-content: center;
 `;
 
 export const MyPhoneInput = styled(PhoneInput)`

@@ -24,10 +24,6 @@ const UserSchema = new mongoose.Schema({
     },
     lastName: { 
         type: String,
-        required: [
-            true,
-            "Last name is required"
-        ],
         trim: true,
     },
     email: { 
@@ -101,6 +97,6 @@ UserSchema.pre('save', function(next) {
         });
 });
 
-UserSchema.plugin(uniqueValidator);
+//UserSchema.plugin(uniqueValidator);
 
 module.exports.User = mongoose.model('User', UserSchema);

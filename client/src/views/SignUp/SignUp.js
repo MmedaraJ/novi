@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { googleLogout, useGoogleLogin } from '@react-oauth/google';
+import {generateRandomNumbersString, getRandomLetters} from '../../utils';
 import {FcGoogle} from 'react-icons/fc'
 import axios from 'axios';
 import {
@@ -10,7 +11,8 @@ import {
   useNavigate
 } from "react-router-dom";
 import { 
-    Error, FileInput, FirstNameDiv, InputDiv, LabelDiv, LastNameDiv, 
+    ButtonDiv,
+    Error, FileInput, FirstNameDiv, GoogleButtonDiv, InputDiv, LabelDiv, LastNameDiv, 
     MainDiv, MainSelect, MyPhoneInput, NamesDiv, Option, P, RandTextDiv, SearchButtonDiv, 
     SelectedFile, TextInput, UploadButton 
 } from './SignUpStyles';
@@ -45,8 +47,6 @@ const SignUp = (props) => {
     const navigate = useNavigate();
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const [confirmationCodeSent, setConfirmationCodeSent] = useState(false);
-
-    const googleClientId = '581931978688-jpk3ms3bd214641nlb7qfucst85svgus.apps.googleusercontent.com'; 
 
     useEffect(() => {
       const handleResize = () => setWindowWidth(window.innerWidth);
@@ -112,14 +112,6 @@ const SignUp = (props) => {
         } catch (error) {
           console.log(error);
         }
-    };
-    
-    const responseMessage = (response) => {
-        console.log(response);
-    };
-
-    const errorMessage = (error) => {
-        console.log(error);
     };
 
     const onInputChanged = (e) => {
@@ -244,11 +236,11 @@ const SignUp = (props) => {
                 firstName: prof.given_name,
                 lastName: prof.family_name,
                 email: prof.email,
-                phoneNumber: '+12345678909',
+                phoneNumber: `+1${generateRandomNumbersString()}`,
                 phoneNumberVerified: false,
                 password: 'password',
                 confirmPassword: 'password',
-                resumeId: '',
+                resumeId: getRandomLetters(),
                 googleSignInId: prof.id
             },
             { withCredentials: true },
@@ -264,7 +256,6 @@ const SignUp = (props) => {
             });
             setPhoneNumber("");
             setSuccess(res.data.msg);
-            localStorage.setItem('usertoken', JSON.stringify(res.data.token));
             localStorage.setItem('userId', JSON.stringify(res.data.user._id));
             navToHome();
         }).catch(err => {
@@ -507,33 +498,19 @@ const SignUp = (props) => {
                     </NamesDiv>
                     <P>or</P>
                     <br></br>
-                    <NamesDiv>
-                        <FirstNameDiv>
-                            <SearchButtonDiv>
-                                <MyButton
-                                    backgroundColor="#000000"
-                                    color="#FFFFFF"
-                                    text="Sign up with Google"
-                                    width="100%"
-                                    height="100%"
-                                    onClick={login}
-                                    icon={<FcGoogle/>}
-                                />
-                            </SearchButtonDiv>
-                        </FirstNameDiv>
-                        <LastNameDiv>
-                            <SearchButtonDiv>
-                                <MyButton
-                                    backgroundColor="#000000"
-                                    color="#FFFFFF"
-                                    text="Sign up with Facebook"
-                                    width="100%"
-                                    height="100%"
-                                    onClick={login}
-                                />
-                            </SearchButtonDiv>
-                        </LastNameDiv>
-                    </NamesDiv>
+                    <ButtonDiv>
+                        <GoogleButtonDiv>
+                            <MyButton
+                                backgroundColor="#000000"
+                                color="#FFFFFF"
+                                text="Sign up with Google"
+                                width="100%"
+                                height="100%"
+                                onClick={login}
+                                icon={<FcGoogle/>}
+                            />
+                        </GoogleButtonDiv>
+                    </ButtonDiv>
                 </form>
             </MainDiv>
         </div>

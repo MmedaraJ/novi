@@ -105,6 +105,17 @@ module.exports.login = async(req, res) => {
         });
 }
 
+module.exports.getOneUserWithGoogleSignInId = (req, res) => {
+    User.findOne({ googleSignInId: req.body.googleSignInId })
+    .select('_id')
+    .then(user => {
+        console.log(user);
+        res.json({user: user});
+    }).catch(err => {
+        console.error(err);
+    });
+}
+
 module.exports.deleteAllUsers = (request, response) => {
     User.deleteMany({})
         .then(res => console.log(`All users deleted\n${res}`))
