@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { googleLogout } from '@react-oauth/google';
 import axios from 'axios';
 import {
@@ -27,6 +27,8 @@ const NavBar = (props) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
     let loggedOut = false;
+    const dropdownRef = useRef(null); 
+    const menuRef = useRef(null);  
 
     useEffect(() => {
         if (localStorage.getItem('userId')) {
@@ -34,12 +36,38 @@ const NavBar = (props) => {
         }
     }, [loggedOut]);
 
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutsideForDropdown);
+        return () => {
+          document.removeEventListener('mousedown', handleClickOutsideForDropdown);
+        };
+    }, []);
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutsideForMenu);
+        return () => {
+          document.removeEventListener('mousedown', handleClickOutsideForMenu);
+        };
+    }, []);
+
     const toggleMenu = () => {
         setShowMenu(!showMenu);
     };
 
     const toggleDropdown = () => {
       setShowDropdown(!showDropdown);
+    };
+
+    const handleClickOutsideForDropdown = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+          setShowDropdown(false);
+        }
+    };
+
+    const handleClickOutsideForMenu = (event) => {
+        if (menuRef.current && !menuRef.current.contains(event.target)) {
+          setShowMenu(false);
+        }
     };
 
     const logUserOut = () => {
@@ -85,7 +113,7 @@ const NavBar = (props) => {
                     (<SignInDiv onClick={props.navToSignUp}><P>Sign Up</P></SignInDiv>):
                     (<SignInDiv onClick={props.navToSignIn}><P>Sign In</P></SignInDiv>):
                 (
-                    <DropdownContainer>
+                    <DropdownContainer ref={dropdownRef}>
                         <div onClick={toggleDropdown}><FaUser/></div>
                         <DropdownContent show={showDropdown}>
                             <DropdownItem><P>Profile</P></DropdownItem>
@@ -101,7 +129,7 @@ const NavBar = (props) => {
         <Hamburger onClick={toggleMenu}>
             <FaBars/>
         </Hamburger>
-        <Menu style={{ display: showMenu ? 'flex' : 'none' }}>
+        <Menu style={{ display: showMenu ? 'flex' : 'none' }} ref={menuRef}>
             <MenuItem onClick={props.navToHome}><P>Find Volunteer Work</P></MenuItem>
             <MenuItem><P>Employers / Post Job</P></MenuItem>
             {
