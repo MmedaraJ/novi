@@ -95,12 +95,6 @@ const SignUp = (props) => {
         onError: (error) => console.log('Login Failed:', error)
     });
 
-    // // log out function to log the user out of google and set the profile array to null
-    // const logOut = () => {
-    //     googleLogout();
-    //     setProfile(null);
-    // };
-
     const handlePhoneChange = (value) => {
         setPhoneNumber(value);
     };
@@ -256,7 +250,12 @@ const SignUp = (props) => {
             });
             setPhoneNumber("");
             setSuccess(res.data.msg);
+            localStorage.removeItem('userId');
+            localStorage.removeItem('usertoken');
+            localStorage.removeItem('googleId');
             localStorage.setItem('userId', JSON.stringify(res.data.user._id));
+            localStorage.setItem('googleId', JSON.stringify(prof.id));
+            localStorage.setItem('usertoken', JSON.stringify(res.data.token));
             navToHome();
         }).catch(err => {
             console.log(err);
@@ -281,7 +280,12 @@ const SignUp = (props) => {
             { withCredentials: true },
         ).then(res => {
             console.log(res);
+            localStorage.removeItem('userId');
+            localStorage.removeItem('usertoken');
+            localStorage.removeItem('googleId');
             localStorage.setItem('userId', JSON.stringify(res.data.user._id));
+            localStorage.setItem('googleId', JSON.stringify(prof.id));
+            localStorage.setItem('usertoken', JSON.stringify(res.data.token));
             navToHome();
         }).catch(err => {
             console.log(err);
@@ -315,8 +319,11 @@ const SignUp = (props) => {
             });
             setPhoneNumber("");
             setSuccess(res.data.msg);
-            localStorage.setItem('usertoken', JSON.stringify(res.data.token));
+            localStorage.removeItem('userId');
+            localStorage.removeItem('usertoken');
+            localStorage.removeItem('googleId');
             localStorage.setItem('userId', JSON.stringify(res.data.user._id));
+            localStorage.setItem('usertoken', JSON.stringify(res.data.token));
             sendConfirmationCode();
         }).catch(err => {
             console.log(err);

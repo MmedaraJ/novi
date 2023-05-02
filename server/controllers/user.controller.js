@@ -122,7 +122,7 @@ module.exports.deleteAllUsers = (request, response) => {
         .catch(err => console.log(err));
 }
 
-module.exports.logout = (request, response) => {
+module.exports.logout = (req, res) => {
     res.clearCookie('usertoken');
     res.sendStatus(200);
 }

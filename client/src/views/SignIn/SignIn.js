@@ -64,7 +64,12 @@ const SignIn = (props) => {
             { withCredentials: true },
         ).then(res => {
             console.log(res);
+            localStorage.removeItem('userId');
+            localStorage.removeItem('usertoken');
+            localStorage.removeItem('googleId');
             localStorage.setItem('userId', JSON.stringify(res.data.user._id));
+            localStorage.setItem('usertoken', JSON.stringify(res.data.token));
+            localStorage.setItem('googleId', JSON.stringify(prof.id));
             navToHome();
         }).catch(err => {
             console.log(err);
@@ -94,7 +99,12 @@ const SignIn = (props) => {
                 password: "",
             });
             setSuccess(res.data.msg);
+            localStorage.removeItem('userId');
+            localStorage.removeItem('usertoken');
+            localStorage.removeItem('googleId');
             localStorage.setItem('userId', JSON.stringify(res.data.user._id));
+            localStorage.setItem('usertoken', JSON.stringify(res.data.token));
+            localStorage.setItem('googleId', JSON.stringify(prof.id));
             navToHome();
         }).catch(err => {
             console.log(err);
@@ -175,8 +185,11 @@ const SignIn = (props) => {
                 password: ""
             });
             setSuccess(res.data.msg);
-            //localStorage.setItem('usertoken', JSON.stringify(res.data.token));
+            localStorage.removeItem('userId');
+            localStorage.removeItem('usertoken');
+            localStorage.removeItem('googleId');
             localStorage.setItem('userId', JSON.stringify(res.data.user._id));
+            localStorage.setItem('usertoken', JSON.stringify(res.data.token));
             navToHome();
         }).catch(err => {
             console.log(err);

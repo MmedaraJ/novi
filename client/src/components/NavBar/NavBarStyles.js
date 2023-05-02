@@ -83,44 +83,38 @@ export const P = styled.p`
 `;
 
 export const Menu = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: 70px;
-    right: 0;
-    z-index: 1;
-    background-color: white;
-    width: 200px;
-    padding: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease-in-out;
-    transform: ${({ showMenu }) => (showMenu ? 'translateX(0)' : `translateX(100%)`)};
-    right: ${({ showMenu }) => (showMenu ? '0' : '220px')};
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 50px;
+  right: 0;
+  z-index: 1;
+  background-color: white;
+  width: 150px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease-in-out;
+  transform: ${({ showMenu }) => (showMenu ? 'translateX(0)' : `translateX(100%)`)};
+  right: ${({ showMenu }) => (showMenu ? '0' : '160px')};
 
-    @media screen and (min-width: 769px) {
-      display: none;
-        // display: ${({ showMenu }) => (showMenu ? 'flex' : 'none')};
-        // flex-direction: row;
-        // justify-content: flex-end;
-        // align-items: center;
-        // position: static;
-        // background-color: transparent;
-        // box-shadow: none;
-        // width: auto;
-        // padding: 0;
-        // transform: translateX(0);
-        // right: 0;
-    }
+  @media screen and (min-width: 769px) {
+    display: none;
+  }
 `;
 
 export const MenuItem = styled.div`
-  margin: 10px;
+  padding-top: 4px;
+  padding-bottom: 4px;
   cursor: pointer;
+  width: 100%;
   
   @media screen and (min-width: 769px) {
     display: none;
+  }
+
+  &:hover {
+    background-color: #ddd;
   }
 `;
 
@@ -132,5 +126,40 @@ export const Hamburger = styled.div`
     cursor: pointer;
     width: 20px;
     margin-right: 5px;
+  }
+`;
+
+export const DropdownContainer = styled.div`
+  position: relative;
+  display: inline-block;
+`;
+
+export const DropdownButton = styled.button`
+  background-color: #3498db;
+  color: white;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+`;
+
+export const DropdownContent = styled.div`
+  display: ${(props) => (props.show ? 'block' : 'none')};
+  position: absolute;
+  background-color: #ffffff;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+`;
+
+export const DropdownItem = styled.div`
+  color: black;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  text-decoration: none;
+  display: block;
+
+  &:hover {
+    background-color: #ddd;
   }
 `;
