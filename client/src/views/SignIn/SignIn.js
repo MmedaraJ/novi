@@ -83,7 +83,7 @@ const SignIn = (props) => {
                 phoneNumberVerified: false,
                 password: 'password',
                 confirmPassword: 'password',
-                resumeId: getRandomLetters(),
+                resumeId: getRandomLetters(1),
                 googleSignInId: prof.id
             },
             { withCredentials: true },
@@ -161,7 +161,35 @@ const SignIn = (props) => {
 
     const onSubmitHandler = (e) => {
         e.preventDefault();
-        console.log("enter pressed");
+        axios.post(
+            "http://localhost:8000/api/user/login", 
+            {
+                email: state.email,
+                password: state.password,
+            },
+            { withCredentials: true },
+        ).then(res => {
+            console.log(res);
+            setState({
+                email: "",
+                password: ""
+            });
+            setSuccess(res.data.msg);
+            //localStorage.setItem('usertoken', JSON.stringify(res.data.token));
+            localStorage.setItem('userId', JSON.stringify(res.data.user._id));
+            navToHome();
+        }).catch(err => {
+            console.log(err);
+            const errorArr = {};
+            const errorResponse = err.response.data.errors;
+
+            if(errorResponse){
+                for(const key of Object.keys(errorResponse)){
+                    errorArr[key] = errorResponse[key].message;
+                }
+            }
+            setErrors(errorArr);
+        });
     }
 
     return(

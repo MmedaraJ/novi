@@ -240,7 +240,7 @@ const SignUp = (props) => {
                 phoneNumberVerified: false,
                 password: 'password',
                 confirmPassword: 'password',
-                resumeId: getRandomLetters(),
+                resumeId: getRandomLetters(1),
                 googleSignInId: prof.id
             },
             { withCredentials: true },
@@ -260,17 +260,7 @@ const SignUp = (props) => {
             navToHome();
         }).catch(err => {
             console.log(err);
-            const errorArr = {};
-            let errMess = "Problem with Google sign up";
-            const errorResponse = err.response.data.errors;
-
-            if(errorResponse){
-                for(const key of Object.keys(errorResponse)){
-                    if(key === 'email' && errorResponse[key].kind === 'unique'){
-                        errMess = "You already have an account. Go to the sign in page instead";
-                    }
-                }
-            }
+            getGoogleSignedInUser(prof);
             setErrors({
                 firstName: "",
                 lastName: "",
@@ -279,8 +269,23 @@ const SignUp = (props) => {
                 password: "",
                 confirmPassword: "",
                 resumeId: "",
-                googleSignUp: errMess
+                googleSignUp: ""
             });
+        });
+    }
+
+    const getGoogleSignedInUser = (prof) => {
+        axios.post(
+            "http://localhost:8000/api/user/get", 
+            { googleSignInId: prof.id },
+            { withCredentials: true },
+        ).then(res => {
+            console.log(res);
+            localStorage.setItem('userId', JSON.stringify(res.data.user._id));
+            navToHome();
+        }).catch(err => {
+            console.log(err);
+            registerGoogleSignUpUser(prof);
         });
     }
 
@@ -329,7 +334,6 @@ const SignUp = (props) => {
 
     return(
         <div>
-            {localStorage.removeItem('phoneNumber')}
             <NavBar
                 navToSignIn={navToSignIn}
                 navToHome={navToHome}

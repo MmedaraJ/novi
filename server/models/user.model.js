@@ -90,11 +90,13 @@ UserSchema.pre('validate', function(next) {
 });
 
 UserSchema.pre('save', function(next) {
+    if(this.password){
     bcrypt.hash(this.password, SALT_WORK_FACTOR)
         .then(hash => {
             this.password = hash;
             next();
         });
+    }
 });
 
 //UserSchema.plugin(uniqueValidator);

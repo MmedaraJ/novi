@@ -48,7 +48,7 @@ const PhoneNumberVerification = (props) => {
         axios.post(
             'http://localhost:8000/api/updatePhoneNumberVerified',
             {
-                userId: localStorage.getItem('userId')
+                userId: localStorage.getItem('userId').replace(/^"+|"+$/g, '')
             },
             {withCredentials: true}
         ).then(res => {

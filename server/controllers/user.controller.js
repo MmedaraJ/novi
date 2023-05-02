@@ -171,7 +171,9 @@ module.exports.updatePhoneNumberVerifiedForUser = async(req, res) => {
     ).then(updatedUser => {
         console.log(`User with ID ${userId} updated successfully.`);
         console.log(updatedUser);
+        res.json({updatedUser});
     }).catch(error => {
         console.error(`Error updating user with ID ${userId}: ${error}`);
+        res.status(500).json({ error });
     });
 }
