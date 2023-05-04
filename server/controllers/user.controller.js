@@ -83,7 +83,9 @@ module.exports.login = async(req, res) => {
  
     if(user === null) {
         // email not found in users collection
-        return res.sendStatus(400);
+        return res.json({
+            email: "Email does not exist"
+        });
     }
  
     // if we made it this far, we found a user with this email address
@@ -92,7 +94,9 @@ module.exports.login = async(req, res) => {
  
     if(!correctPassword) {
         // password wasn't a match!
-        return res.sendStatus(400);
+        return res.json({
+            password: "Incorrect Password"
+        });
     }
  
     // if we made it this far, the password was correct

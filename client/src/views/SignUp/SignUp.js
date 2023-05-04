@@ -14,7 +14,7 @@ import {
 import { 
     ButtonDiv,
     Error, FileInput, FirstNameDiv, GoogleButtonDiv, InputDiv, LabelDiv, LastNameDiv, 
-    MainDiv, MainSelect, MyPhoneInput, NamesDiv, Option, P, RandTextDiv, SearchButtonDiv, 
+    MainDiv, MainSelect, MyPhoneInput, NamesDiv, Option, P, RandTextDiv, ResumeLabel, ResumeNameText, ResumeText, SearchButtonDiv, 
     SelectedFile, TextInput, UploadButton 
 } from './SignUpStyles';
 import NavBar from '../../components/NavBar/NavBar';
@@ -55,10 +55,6 @@ const SignUp = (props) => {
       window.addEventListener('resize', handleResize);
       return () => window.removeEventListener('resize', handleResize);
     }, []);
-
-    useEffect(() => {
-        handleFileNameLengthOnWindowSizeChange();
-    }, [windowWidth]);
 
     useEffect(() => {
         if(phoneNumber != "") localStorage.setItem('phoneNumber', JSON.stringify(phoneNumber));
@@ -174,28 +170,7 @@ const SignUp = (props) => {
         setSelectedFile(file? file: null);
         console.log(selectedFile);
         let fileName = file? file.name: null;
-        if(fileName){
-            if(windowWidth >= 2560) fileName = fileName.substring(0, 251);
-            else if(windowWidth >= 1440) fileName = fileName.substring(0, 120);
-            else if(windowWidth >= 1024) fileName = fileName.substring(0, 80);
-            else if(windowWidth > 768 && windowWidth < 909) fileName = fileName.substring(0, 50);
-            else if(windowWidth > 431) fileName = fileName.substring(0, 60);
-            else if(windowWidth >= 375) fileName = fileName.substring(0, 50);
-            else if(windowWidth >= 320) fileName = fileName.substring(0, 40);
-            else if(windowWidth < 320) fileName = fileName.substring(0, 20);
-        }
         setSelectedFileName(fileName);
-    }
-
-    function handleFileNameLengthOnWindowSizeChange(){
-        if(windowWidth >= 2560) setSelectedFileName(selectedFileName? selectedFileName.substring(0, 251): null);
-        else if(windowWidth >= 1440) setSelectedFileName(selectedFileName? selectedFileName.substring(0, 120): null);
-        else if(windowWidth >= 1024) setSelectedFileName(selectedFileName? selectedFileName.substring(0, 80): null);
-        else if(windowWidth > 768 && windowWidth < 909) setSelectedFileName(selectedFileName? selectedFileName.substring(0, 50): null);
-        else if(windowWidth > 431) setSelectedFileName(selectedFileName? selectedFileName.substring(0, 60): null);
-        else if(windowWidth >= 375) setSelectedFileName(selectedFileName? selectedFileName.substring(0, 50): null);
-        else if(windowWidth >= 320) setSelectedFileName(selectedFileName? selectedFileName.substring(0, 40): null);
-        else if(windowWidth < 320) setSelectedFileName(selectedFileName? selectedFileName.substring(0, 20): null);
     }
 
     const uploadFileToGridFs = (e) => {
@@ -469,7 +444,7 @@ const SignUp = (props) => {
                     </NamesDiv>
                     <NamesDiv>
                         <FirstNameDiv>
-                            <label htmlFor="file-upload">
+                            <ResumeLabel htmlFor="file-upload">
                                 <InputDiv
                                     borderColor={errors.resumeName? 'red': '#000000'}
                                 >
@@ -477,16 +452,14 @@ const SignUp = (props) => {
                                         htmlFor="file-upload"
                                         borderColor={errors.resumeName? 'red': '#000000'}
                                     >
-                                        <P>Resume</P>
+                                        <ResumeText>Resume</ResumeText>
                                     </UploadButton>
                                     <SelectedFile>
-                                        <P>
-                                            {
-                                                selectedFileName?
-                                                selectedFileName:
-                                                (<span style={{color: "gray"}}>Optional</span>)
-                                            }
-                                        </P>
+                                        {
+                                            selectedFileName?
+                                            <ResumeNameText>{selectedFileName.substring(0, 58)}</ResumeNameText>:
+                                            (<P><span style={{color: "gray"}}>Optional</span></P>)
+                                        }
                                     </SelectedFile>
                                     <FileInput
                                         id="file-upload"
@@ -495,7 +468,7 @@ const SignUp = (props) => {
                                         onChange={handleFileUpload}
                                     />
                                 </InputDiv>
-                            </label>
+                            </ResumeLabel>
                             <LabelDiv>
                                 {errors.resumeName && <Error>{errors.resumeName}</Error>}
                             </LabelDiv>
@@ -514,7 +487,6 @@ const SignUp = (props) => {
                         </LastNameDiv>
                     </NamesDiv>
                     <P>or</P>
-                    <br></br>
                     <ButtonDiv>
                         <GoogleButtonDiv>
                             <MyButton

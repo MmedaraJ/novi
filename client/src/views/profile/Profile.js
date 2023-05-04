@@ -12,7 +12,8 @@ import {
     BlankDiv,
     ButtonDiv,
     Error, FileInput, FirstNameDiv, GoogleButtonDiv, InputDiv, LabelDiv, LastNameDiv, 
-    MainDiv, MainSelect, MyPhoneInput, NamesDiv, Option, P, RandTextDiv, SearchButtonDiv, 
+    LastNameDivWithButtons, 
+    MainDiv, MainSelect, MyPhoneInput, NamesDiv, Option, P, RandTextDiv, ResumeLabel, ResumeNameText, ResumeText, SearchButtonDiv, 
     SelectedFile, Success, TextInput, UploadButton 
 } from './ProfileStyles';
 import NavBar from '../../components/NavBar/NavBar';
@@ -109,10 +110,6 @@ const Profile = (props) => {
                 });
         }
     }, [state.resumeName]);
-
-    useEffect(() => {
-        handleFileNameLengthOnWindowSizeChange();
-    }, [windowWidth]);
 
     useEffect(() => {
         if(phoneNumberVerified){
@@ -435,30 +432,9 @@ const Profile = (props) => {
         setSelectedFile(file? file: null);
         console.log(file);
         let fileName = file? file.name: null;
-        if(fileName){
-            if(windowWidth >= 2560) fileName = fileName.substring(0, 251);
-            else if(windowWidth >= 1440) fileName = fileName.substring(0, 120);
-            else if(windowWidth >= 1024) fileName = fileName.substring(0, 80);
-            else if(windowWidth > 768 && windowWidth < 909) fileName = fileName.substring(0, 50);
-            else if(windowWidth > 431) fileName = fileName.substring(0, 60);
-            else if(windowWidth >= 375) fileName = fileName.substring(0, 50);
-            else if(windowWidth >= 320) fileName = fileName.substring(0, 40);
-            else if(windowWidth < 320) fileName = fileName.substring(0, 20);
-        }
         setSelectedFileName(fileName);
         uploadFileToGridFs(file? file: null);
         setIsSaveButtonDisabled(false);
-    }
-
-    function handleFileNameLengthOnWindowSizeChange(){
-        if(windowWidth >= 2560) setSelectedFileName(selectedFileName? selectedFileName.substring(0, 251): null);
-        else if(windowWidth >= 1440) setSelectedFileName(selectedFileName? selectedFileName.substring(0, 120): null);
-        else if(windowWidth >= 1024) setSelectedFileName(selectedFileName? selectedFileName.substring(0, 80): null);
-        else if(windowWidth > 768 && windowWidth < 909) setSelectedFileName(selectedFileName? selectedFileName.substring(0, 50): null);
-        else if(windowWidth > 431) setSelectedFileName(selectedFileName? selectedFileName.substring(0, 60): null);
-        else if(windowWidth >= 375) setSelectedFileName(selectedFileName? selectedFileName.substring(0, 50): null);
-        else if(windowWidth >= 320) setSelectedFileName(selectedFileName? selectedFileName.substring(0, 40): null);
-        else if(windowWidth < 320) setSelectedFileName(selectedFileName? selectedFileName.substring(0, 20): null);
     }
 
     const uploadFileToGridFs = (file) => {
@@ -680,7 +656,7 @@ const Profile = (props) => {
                                 {errors.phoneNumber && <Error>{errors.phoneNumber}</Error>}
                             </LabelDiv>
                         </FirstNameDiv>
-                        <LastNameDiv>
+                        <LastNameDivWithButtons>
                             <SearchButtonDiv>
                                 <MyButton
                                     backgroundColor="#000000"
@@ -700,8 +676,9 @@ const Profile = (props) => {
                                     }
                                 />
                             </SearchButtonDiv>
-                        </LastNameDiv>
+                        </LastNameDivWithButtons>
                     </NamesDiv>
+                    <br></br>
                     <NamesDiv>
                         <FirstNameDiv>
                             <InputDiv
@@ -719,7 +696,7 @@ const Profile = (props) => {
                                 {errors.phoneNumberVerificationCode && <Error>{errors.phoneNumberVerificationCode}</Error>}
                             </LabelDiv>
                         </FirstNameDiv>
-                        <LastNameDiv>
+                        <LastNameDivWithButtons>
                             <SearchButtonDiv>
                                 <MyButton
                                     backgroundColor="#000000"
@@ -735,14 +712,14 @@ const Profile = (props) => {
                                     }
                                 />
                             </SearchButtonDiv>
-                        </LastNameDiv>
+                        </LastNameDivWithButtons>
                     </NamesDiv>
                     {success.phoneNumberVerification && <Success>{success.phoneNumberVerification}</Success>}
                     <br></br>
                     <br></br>
                     <NamesDiv>
                         <FirstNameDiv>
-                            <label htmlFor="file-upload">
+                            <ResumeLabel htmlFor="file-upload">
                                 <InputDiv
                                     borderColor={errors.resumeName? 'red': '#000000'}
                                 >
@@ -750,16 +727,14 @@ const Profile = (props) => {
                                         htmlFor="file-upload"
                                         borderColor={errors.resumeName? 'red': '#000000'}
                                     >
-                                        <P>Resume</P>
+                                        <ResumeText>Resume</ResumeText>
                                     </UploadButton>
                                     <SelectedFile>
-                                        <P>
-                                            {
-                                                selectedFileName?
-                                                selectedFileName:
-                                                (<span style={{color: "gray"}}>Upload Resume</span>)
-                                            }
-                                        </P>
+                                        {
+                                            selectedFileName?
+                                            <ResumeNameText>{selectedFileName.substring(0, 58)}</ResumeNameText>:
+                                            (<P><span style={{color: "gray"}}>Upload Resume</span></P>)
+                                        }
                                     </SelectedFile>
                                     <FileInput
                                         id="file-upload"
@@ -768,12 +743,12 @@ const Profile = (props) => {
                                         onChange={handleFileUpload}
                                     />
                                 </InputDiv>
-                            </label>
+                            </ResumeLabel>
                             <LabelDiv>
                                 {errors.resumeName && <Error>{errors.resumeName}</Error>}
                             </LabelDiv>
                         </FirstNameDiv>
-                        <LastNameDiv>
+                        <LastNameDivWithButtons>
                             <SearchButtonDiv>
                                 {
                                     fileSrc &&
@@ -789,8 +764,9 @@ const Profile = (props) => {
                                     </a>
                                 }
                             </SearchButtonDiv>
-                        </LastNameDiv>
+                        </LastNameDivWithButtons>
                     </NamesDiv>
+                    <br></br>
                     <br></br>
                     <ButtonDiv>
                         <GoogleButtonDiv>

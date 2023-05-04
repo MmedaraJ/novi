@@ -185,16 +185,26 @@ const SignIn = (props) => {
             { withCredentials: true },
         ).then(res => {
             console.log(res);
-            setState({
-                email: "",
-                password: ""
-            });
-            setSuccess(res.data.msg);
-            localStorage.removeItem('userId');
-            localStorage.removeItem('usertoken');
-            localStorage.removeItem('googleId');
-            localStorage.setItem('userId', JSON.stringify(res.data.user._id));
-            navToHome();
+            if(res.data.email){
+                setErrors({
+                    email: res.data.email
+                });
+            }else if(res.data.password){
+                setErrors({
+                    password: res.data.password
+                });
+            }else{
+                setState({
+                    email: "",
+                    password: ""
+                });
+                setSuccess(res.data.msg);
+                localStorage.removeItem('userId');
+                localStorage.removeItem('usertoken');
+                localStorage.removeItem('googleId');
+                localStorage.setItem('userId', JSON.stringify(res.data.user._id));
+                navToHome();
+            }
         }).catch(err => {
             console.log(err);
             const errorArr = {};
@@ -274,7 +284,6 @@ const SignIn = (props) => {
                         </SearchButtonDiv>
                     </ButtonDiv>
                     <P>or</P>
-                    <br></br>
                     <ButtonDiv>
                         <SearchButtonDiv>
                             <MyButton

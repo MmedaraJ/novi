@@ -7,33 +7,72 @@ export const MainDiv = styled.div`
     height: max;
     width: max;
     padding: 2%;
-    padding-left: 16%;
-    padding-right: 16%;
+    padding-left: 40%;
+    padding-right: 40%;
     justify-content: center;
     align-items: center;
+
+    @media screen and (max-width: 1090px) {
+        padding-left: 38%;
+        padding-right: 38%;
+    }
+
+    @media screen and (max-width: 910px) {
+        padding-left: 35%;
+        padding-right: 35%;
+    }
+
+    @media screen and (max-width: 730px) {
+        padding-left: 32%;
+        padding-right: 32%;
+    }
+
+    @media screen and (max-width: 610px) {
+        padding-left: 30%;
+        padding-right: 30%;
+    }
+
+    @media screen and (max-width: 550px) {
+        padding-left: 27%;
+        padding-right: 27%;
+    }
+
+    @media screen and (max-width: 473px) {
+        padding-left: 25%;
+        padding-right: 25%;
+    }
+
+    @media screen and (max-width: 435px) {
+        padding-left: 22%;
+        padding-right: 22%;
+    }
+
+    @media screen and (max-width: 390px) {
+        padding-left: 18%;
+        padding-right: 18%;
+    }
+
+    @media screen and (max-width: 350px) {
+        padding-left: 15%;
+        padding-right: 15%;
+    }
+
+    @media screen and (max-width: 319px) {
+        padding-left: 10%;
+        padding-right: 10%;
+    }
 `;
 
 export const FirstNameDiv = styled.div`
-    flex: 1;
-    order: 0;
-    margin-right: 30px;
-    height: 60px;
-
-    @media screen and (max-width: 768px) {
-        display: block;
-        margin-right: 0px;
-    }
+    height: 40px;
+    display: block;
+    margin-right: 0px;
 `;
 
 export const LastNameDiv = styled.div`
-    flex: 1;
-    order: 1;
-    height: 60px;
-
-    @media screen and (max-width: 768px) {
-        display: block;
-        margin-top: 16px;
-    }
+    height: 40px;
+    display: block;
+    margin-top: 16px;
 
     @media screen and (max-width: 425px) {
         margin-top: 12px;
@@ -41,43 +80,22 @@ export const LastNameDiv = styled.div`
 `;
 
 export const NamesDiv = styled.div`
-    display: flex;
-    margin-bottom: 16px;
-
-    @media screen and (max-width: 768px) {
-        display: block;
-        margin-top: 12px;
-        margin-bottom: 12px;
-    }
+    display: block;
+    margin-top: 12px;
+    margin-bottom: 12px;
 `;
 
 export const RandTextDiv = styled.div`
-    justify-content: start;
-    align-items: start;
     display: flex;
-
-    @media screen and (max-width: 768px) {
-        justify-content: center;
-        align-items: center;
-        padding: 0px;
-    }
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
 `;
 
 export const InputDiv = styled.div`
     display: flex;
     order: 1;
-    height: 35px;
-    border: 1px solid;
-    border-color: ${props => props.borderColor};
-    border-radius: .5rem;
-    padding: 0.25rem;
-    align-items: center;
-`;
-
-export const CenterInputDiv = styled.div`
-    display: flex;
-    height: 35px;
-    width: 100%;
+    height: 20px;
     border: 1px solid;
     border-color: ${props => props.borderColor};
     border-radius: .5rem;
@@ -87,7 +105,6 @@ export const CenterInputDiv = styled.div`
 
 export const TextInput = styled.input`
     padding: 5px;
-    padding 10px 10px;
     color: black;
     border: none;
     flex: 1;
@@ -127,6 +144,22 @@ export const Success = styled.p`
     text-align: center;
 `;
 
+export const ResumeText = styled.p`
+    color: #000000;
+    font-size: small;
+    text-align: center;
+    padding: 0px;
+    margin: 0px;
+`;
+
+export const ResumeNameText = styled.p`
+    color: #000000;
+    font-size: xx-small;
+    text-align: center;
+    padding: 0px;
+    margin: 0px;
+`;
+
 export const MainSelect = styled.select`
     background-color: #FFFFFF;
     padding-left: 8px;
@@ -163,14 +196,15 @@ export const FileInput = styled.input`
 `;
 
 export const SelectedFile = styled.div`
-    font-size: 14px;
     padding-left: 8px;
+    padding: 8px
 `;
 
 export const UploadButton = styled.label`
   display: inline-block;
-  padding-bottom: 6px;
-  padding-left: 8px;
+  margin-top: 8px;
+  margin-bottom: 4px;
+  margin-left: 4px;
   padding-right: 8px;
   border-right: ${props => props.borderColor} solid 1px;
   cursor: pointer;
@@ -189,15 +223,16 @@ export const SearchButtonDiv = styled.div`
     align-items: center;
 `;
 
+export const ResumeLabel = styled.label`
+    align-items: center;
+    justify-content: center;
+`;
+
 export const GoogleButtonDiv = styled.div`
-    width: 50%;
     height: 45px;
     align-items: center;
     justify-content: center;
-
-    @media screen and (max-width: 768px) {
-        width: 100%;
-    }
+    width: 100%;
 `;
 
 export const ButtonDiv = styled.div`
