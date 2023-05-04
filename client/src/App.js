@@ -11,13 +11,15 @@ import {
 import SignUp from './views/SignUp/SignUp';
 import SignIn from './views/SignIn/SignIn';
 import PhoneNumberVerification from './views/PhoneNumberVerification/PhoneNumberVerification';
+import Profile from './views/profile/Profile';
 
 function App() {
   const routes = useRoutes([
     { path: '/', element: (<div className='App'><Home/></div>) },
     { path: '/signup', element: (<div className='App'><SignUp/></div>) },
     { path: '/signin', element: (<div className='App'> <SignIn/></div>) },
-    { path: '/phoneNumberVerification', element: (<div className='App'><PhoneNumberVerification/></div>) }
+    { path: '/phoneNumberVerification', element: (<div className='App'><PhoneNumberVerification/></div>) },
+    { path: '/profile', element: (<div className='App'> <Profile/></div>) },
   ]);
 
   return routes;

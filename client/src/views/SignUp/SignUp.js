@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 import {generateRandomNumbersString, getRandomLetters} from '../../utils';
-import {FcGoogle} from 'react-icons/fc'
+import {FcGoogle} from 'react-icons/fc';
+import {FaEye, FaEyeSlash} from 'react-icons/fa';
 import axios from 'axios';
 import {
   BrowserRouter as Router,
@@ -26,11 +27,11 @@ const SignUp = (props) => {
         email: "",
         password: "",
         confirmPassword: "",
-        resumeId: ""
+        resumeName: ""
     });
     const [phoneNumber, setPhoneNumber] = useState("");
     const [profile, setProfile] = useState([]);
-    const [user, setUser] = useState([]);
+    const [user, setUser] = useState(null);
     const [errors, setErrors] = useState({
         firstName: "",
         lastName: "",
@@ -38,7 +39,7 @@ const SignUp = (props) => {
         phoneNumber: "",
         password: "",
         confirmPassword: "",
-        resumeId: "",
+        resumeName: "",
         googleSignUp: ""
     });
     const [success, setSuccess] = useState("");
@@ -47,6 +48,7 @@ const SignUp = (props) => {
     const navigate = useNavigate();
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const [confirmationCodeSent, setConfirmationCodeSent] = useState(false);
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
     useEffect(() => {
       const handleResize = () => setWindowWidth(window.innerWidth);
@@ -87,6 +89,10 @@ const SignUp = (props) => {
         [ user ]
     );
 
+    const togglePasswordVisibility = () => {
+      setIsPasswordVisible(!isPasswordVisible);
+    };
+
     const login = useGoogleLogin({
         onSuccess: (codeResponse) => {
             console.log(codeResponse);
@@ -114,7 +120,7 @@ const SignUp = (props) => {
         let email = state.email;
         let password = state.password;
         let confirmPassword = state.confirmPassword;
-        let resumeId = state.resumeId;
+        let resumeName = state.resumeName;
 
         const name = e.target.name;
         const value = e.target.value;
@@ -147,7 +153,7 @@ const SignUp = (props) => {
             email: email,
             password: password,
             confirmPassword: confirmPassword,
-            resumeId: resumeId,
+            resumeName: resumeName,
         });
     }
 
@@ -204,19 +210,19 @@ const SignUp = (props) => {
                 formData
             ).then((response) => {
                 console.log(response.data);
-                const fileId = response.data.file.id;
-                console.log(`File uploaded with ID ${fileId}`);
-                if(fileId){
+                const originalname = response.data.file.originalname;
+                console.log(`File uploaded with ORIGINAL NAME ${originalname}`);
+                if(originalname){
                     setState({
                         firstName: state.firstName,
                         lastName: state.lastName,
                         email: state.email,
                         password: state.password,
                         confirmPassword: state.confirmPassword,
-                        resumeId: fileId,
+                        resumeName: originalname,
                     });
                 }
-                onSubmitHandler(fileId);
+                onSubmitHandler(originalname);
             }).catch(err => console.log(err));
         }else{
             onSubmitHandler();
@@ -234,7 +240,7 @@ const SignUp = (props) => {
                 phoneNumberVerified: false,
                 password: 'password',
                 confirmPassword: 'password',
-                resumeId: getRandomLetters(1),
+                resumeName: getRandomLetters(1),
                 googleSignInId: prof.id
             },
             { withCredentials: true },
@@ -246,7 +252,7 @@ const SignUp = (props) => {
                 email: "",
                 password: "",
                 confirmPassword: "",
-                resumeId: "",
+                resumeName: "",
             });
             setPhoneNumber("");
             setSuccess(res.data.msg);
@@ -255,7 +261,6 @@ const SignUp = (props) => {
             localStorage.removeItem('googleId');
             localStorage.setItem('userId', JSON.stringify(res.data.user._id));
             localStorage.setItem('googleId', JSON.stringify(prof.id));
-            localStorage.setItem('usertoken', JSON.stringify(res.data.token));
             navToHome();
         }).catch(err => {
             console.log(err);
@@ -267,7 +272,7 @@ const SignUp = (props) => {
                 phoneNumber: "",
                 password: "",
                 confirmPassword: "",
-                resumeId: "",
+                resumeName: "",
                 googleSignUp: ""
             });
         });
@@ -275,7 +280,7 @@ const SignUp = (props) => {
 
     const getGoogleSignedInUser = (prof) => {
         axios.post(
-            "http://localhost:8000/api/user/get", 
+            "http://localhost:8000/api/user/getGoogleUser", 
             { googleSignInId: prof.id },
             { withCredentials: true },
         ).then(res => {
@@ -285,7 +290,6 @@ const SignUp = (props) => {
             localStorage.removeItem('googleId');
             localStorage.setItem('userId', JSON.stringify(res.data.user._id));
             localStorage.setItem('googleId', JSON.stringify(prof.id));
-            localStorage.setItem('usertoken', JSON.stringify(res.data.token));
             navToHome();
         }).catch(err => {
             console.log(err);
@@ -293,7 +297,7 @@ const SignUp = (props) => {
         });
     }
 
-    const onSubmitHandler = (fileId) => {
+    const onSubmitHandler = (originalname) => {
         axios.post(
             "http://localhost:8000/api/user/create", 
             {
@@ -304,7 +308,7 @@ const SignUp = (props) => {
                 phoneNumberVerified: false,
                 password: state.password,
                 confirmPassword: state.confirmPassword,
-                resumeId: fileId
+                resumeName: originalname
             },
             { withCredentials: true },
         ).then(res => {
@@ -315,7 +319,7 @@ const SignUp = (props) => {
                 email: "",
                 password: "",
                 confirmPassword: "",
-                resumeId: "",
+                resumeName: "",
             });
             setPhoneNumber("");
             setSuccess(res.data.msg);
@@ -323,7 +327,6 @@ const SignUp = (props) => {
             localStorage.removeItem('usertoken');
             localStorage.removeItem('googleId');
             localStorage.setItem('userId', JSON.stringify(res.data.user._id));
-            localStorage.setItem('usertoken', JSON.stringify(res.data.token));
             sendConfirmationCode();
         }).catch(err => {
             console.log(err);
@@ -341,10 +344,7 @@ const SignUp = (props) => {
 
     return(
         <div>
-            <NavBar
-                navToSignIn={navToSignIn}
-                navToHome={navToHome}
-            ></NavBar>
+            <NavBar/>
             <br></br>
             <br></br>
             <MainDiv>
@@ -433,11 +433,14 @@ const SignUp = (props) => {
                                 <TextInput
                                     required
                                     name='password'
-                                    type='password'
+                                    type={isPasswordVisible ? 'text' : 'password'}
                                     placeholder='Password'
                                     value={state.password}
                                     onChange={onInputChanged}
                                 />
+                                <div style={{marginRight: '4px'}} onClick={togglePasswordVisibility}>
+                                    {isPasswordVisible ? <FaEyeSlash /> : <FaEye />}
+                                </div>
                             </InputDiv>
                             <LabelDiv>
                                 {errors.password && <Error>{errors.password}</Error>}
@@ -450,11 +453,14 @@ const SignUp = (props) => {
                                 <TextInput
                                     required
                                     name='confirmPassword'
-                                    type='password'
+                                    type={isPasswordVisible ? 'text' : 'password'}
                                     placeholder='Confirm Password'
                                     value={state.confirmPassword}
                                     onChange={onInputChanged}
                                 />
+                                <div style={{marginRight: '4px'}} onClick={togglePasswordVisibility}>
+                                    {isPasswordVisible ? <FaEyeSlash /> : <FaEye />}
+                                </div>
                             </InputDiv>
                             <LabelDiv>
                                 {errors.confirmPassword && <Error>{errors.confirmPassword}</Error>}
@@ -465,11 +471,11 @@ const SignUp = (props) => {
                         <FirstNameDiv>
                             <label htmlFor="file-upload">
                                 <InputDiv
-                                    borderColor={errors.resumeId? 'red': '#000000'}
+                                    borderColor={errors.resumeName? 'red': '#000000'}
                                 >
                                     <UploadButton 
                                         htmlFor="file-upload"
-                                        borderColor={errors.resumeId? 'red': '#000000'}
+                                        borderColor={errors.resumeName? 'red': '#000000'}
                                     >
                                         <P>Resume</P>
                                     </UploadButton>
@@ -491,7 +497,7 @@ const SignUp = (props) => {
                                 </InputDiv>
                             </label>
                             <LabelDiv>
-                                {errors.resumeId && <Error>{errors.resumeId}</Error>}
+                                {errors.resumeName && <Error>{errors.resumeName}</Error>}
                             </LabelDiv>
                         </FirstNameDiv>
                         <LastNameDiv>
@@ -517,6 +523,7 @@ const SignUp = (props) => {
                                 text="Sign up with Google"
                                 width="100%"
                                 height="100%"
+                                type="button"
                                 onClick={login}
                                 icon={<FcGoogle/>}
                             />

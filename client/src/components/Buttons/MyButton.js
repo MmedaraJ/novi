@@ -17,6 +17,7 @@ const MyButton = (props) => {
       color={props.color}
       width={props.width}
       height={props.height}
+      disabled={props.disabled}
     >
       {props.icon && (<span style={{marginRight:'8px'}}>{props.icon}</span>)}
       <span>{props.text}</span>

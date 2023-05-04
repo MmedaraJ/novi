@@ -88,6 +88,11 @@ const PhoneNumberVerification = (props) => {
         navigate('/');
     } 
 
+    const navToProfile = () => {
+        localStorage.removeItem('phoneNumber');
+        navigate('/profile');
+    } 
+
     const verifyConfirmationCode = () => {
         axios.post(
             'http://localhost:8000/api/verify-code', 
@@ -96,7 +101,11 @@ const PhoneNumberVerification = (props) => {
                 confirmationCode: state.code 
             }
         ).then(res => {
-            setPhoneNumberVerified(true);
+            if(res.data.success){
+                setPhoneNumberVerified(true);
+            }else{
+                setErrors({code: 'Invalid verification code'});
+            }
         }).catch(error => {
             console.log(error);
             const e = error.response.data.error;
@@ -114,12 +123,10 @@ const PhoneNumberVerification = (props) => {
                 setConfirmationCodeSent(true);
             }).catch(error => {
                 console.log(error);
-                //TODO navigate to profile page
-                navToHome();
+                navToProfile();
             });
         }else{
-            //TODO navigate to profile page
-            navToHome();
+            navToProfile();
         }
     };
 
@@ -130,10 +137,7 @@ const PhoneNumberVerification = (props) => {
 
     return(
         <div>
-            <NavBar
-                navToSignUp={navToSignUp}
-                navToHome={navToHome}
-            ></NavBar>
+            <NavBar/>
             <br></br>
             <br></br>
             <MainDiv>
@@ -176,7 +180,7 @@ const PhoneNumberVerification = (props) => {
                 {success && <Success>{success}</Success>}
                 <P onClick={sendConfirmationCode}><u>Resend code</u></P>
                 {/* Nav to profile page */}
-                <P onClick={navToHome}><u>Change phone number</u></P>
+                <P onClick={navToProfile}><u>Change phone number</u></P>
             </MainDiv>
         </div>
     )

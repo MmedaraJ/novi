@@ -42,10 +42,7 @@ const Home = (props) => {
 
   return (
     <div>
-      <NavBar
-        navToSignIn={navToSignIn}
-        navToHome={navToHome}
-      ></NavBar>
+      <NavBar/>
       <SearchBar></SearchBar>
       <br></br>
       <br></br>

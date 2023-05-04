@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 import {generateRandomNumbersString, getRandomLetters} from '../../utils';
-import {FcGoogle} from 'react-icons/fc'
+import {FcGoogle} from 'react-icons/fc';
+import {FaEye, FaEyeSlash} from 'react-icons/fa';
 import axios from 'axios';
 import {
   BrowserRouter as Router,
@@ -34,7 +35,8 @@ const SignIn = (props) => {
     const navigate = useNavigate();
     const location = useLocation();
     const [profile, setProfile] = useState([]);
-    const [user, setUser] = useState([]);
+    const [user, setUser] = useState(null);
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
     useEffect(
         () => {
@@ -57,9 +59,13 @@ const SignIn = (props) => {
         [ user ]
     );
 
+    const togglePasswordVisibility = () => {
+      setIsPasswordVisible(!isPasswordVisible);
+    };
+
     const getGoogleSignedInUser = (prof) => {
         axios.post(
-            "http://localhost:8000/api/user/get", 
+            "http://localhost:8000/api/user/getGoogleUser", 
             { googleSignInId: prof.id },
             { withCredentials: true },
         ).then(res => {
@@ -68,7 +74,6 @@ const SignIn = (props) => {
             localStorage.removeItem('usertoken');
             localStorage.removeItem('googleId');
             localStorage.setItem('userId', JSON.stringify(res.data.user._id));
-            localStorage.setItem('usertoken', JSON.stringify(res.data.token));
             localStorage.setItem('googleId', JSON.stringify(prof.id));
             navToHome();
         }).catch(err => {
@@ -88,7 +93,7 @@ const SignIn = (props) => {
                 phoneNumberVerified: false,
                 password: 'password',
                 confirmPassword: 'password',
-                resumeId: getRandomLetters(1),
+                resumeName: getRandomLetters(1),
                 googleSignInId: prof.id
             },
             { withCredentials: true },
@@ -102,8 +107,8 @@ const SignIn = (props) => {
             localStorage.removeItem('userId');
             localStorage.removeItem('usertoken');
             localStorage.removeItem('googleId');
+            localStorage.removeItem('phoneNumber');
             localStorage.setItem('userId', JSON.stringify(res.data.user._id));
-            localStorage.setItem('usertoken', JSON.stringify(res.data.token));
             localStorage.setItem('googleId', JSON.stringify(prof.id));
             navToHome();
         }).catch(err => {
@@ -189,7 +194,6 @@ const SignIn = (props) => {
             localStorage.removeItem('usertoken');
             localStorage.removeItem('googleId');
             localStorage.setItem('userId', JSON.stringify(res.data.user._id));
-            localStorage.setItem('usertoken', JSON.stringify(res.data.token));
             navToHome();
         }).catch(err => {
             console.log(err);
@@ -207,10 +211,7 @@ const SignIn = (props) => {
 
     return(
         <div>
-            <NavBar
-                navToSignUp={navToSignUp}
-                navToHome={navToHome}
-            ></NavBar>
+            <NavBar/>
             <br></br>
             <br></br>
             <MainDiv>
@@ -246,11 +247,14 @@ const SignIn = (props) => {
                                 <TextInput
                                     required
                                     name='password'
-                                    type='password'
+                                    type={isPasswordVisible ? 'text' : 'password'}
                                     placeholder='Password'
                                     value={state.password}
                                     onChange={onInputChanged}
                                 />
+                                <div style={{marginRight: '4px'}} onClick={togglePasswordVisibility}>
+                                    {isPasswordVisible ? <FaEyeSlash /> : <FaEye />}
+                                </div>
                             </InputDiv>
                             <LabelDiv>
                                 {errors.password && <Error>{errors.password}</Error>}
@@ -279,6 +283,7 @@ const SignIn = (props) => {
                                 text="Sign in with Google"
                                 width="100%"
                                 height="100%"
+                                type="button"
                                 onClick={login}
                                 icon={<FcGoogle/>}
                             />

@@ -8,7 +8,11 @@ const axios = require('axios');
 const multer = require('multer');
 const mongoose = require('mongoose');
 const Grid = require('gridfs-stream');
+const methodOverride = require( 'method-override');
 const {GridFsStorage} = require('multer-gridfs-storage');
+const mongodb = require('mongodb');
+const fs = require('fs');
+const path = require('path');
 
 require('./server/config/mongoose.config');
 require('dotenv').config();
@@ -32,39 +36,56 @@ app.use(
 
 require('./server/routes/user.routes')(app);
 
-let gfs;
-const conn = mongoose.connection;
-conn.once('open', () => {
-    gfs = Grid(conn.getClient().db(), mongoose.mongo);
-    gfs.collection('uploads');
+// Configure multer storage (you can also use multer's memoryStorage for in-memory storage)
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  },
 });
 
-// Set up multer and GridFS storage
-const storage = new GridFsStorage({
-    url: 'mongodb://localhost/practimatch',
-    options: { useNewUrlParser: true, useUnifiedTopology: true },
-    file: (req, file) => {
-      return {
-        filename: file.originalname
-      }
-    }
-});
 const upload = multer({ storage });
 
-// Route to upload a file
 app.post('/api/upload', upload.single('file'), (req, res) => {
-    res.json({ file: req.file });
+  res.status(200).json({ 
+    message: 'File uploaded successfully',
+    file: req.file
+  });
 });
 
-// Route to download a file
-app.get('/download/:filename', (req, res) => {
-    gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
-      if (!file || file.length === 0) {
-        return res.status(404).json({ message: 'File not found' });
-      }
-      const readstream = gfs.createReadStream(file.filename);
-      readstream.pipe(res);
-    });
+app.get('/api/download/:filename', (req, res) => {
+  const filename = req.params.filename;
+  const filePath = path.join(__dirname, 'uploads', filename);
+
+  // Check if file exists
+  fs.access(filePath, fs.constants.F_OK, (err) => {
+    if (err) {
+      console.error('File not found:', err.message);
+      return res.status(404).json({ message: 'File not found' });
+    }
+
+    // Set the headers and stream the file
+    res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
+    const readStream = fs.createReadStream(filePath);
+    readStream.pipe(res);
+  });
 });
+
+// const db = mongoose.connection.getClient().db('practimatch');
+// const bucket = new mongodb.GridFSBucket(db, {bucketName: "uploads"});
+
+// // Route to upload a file
+// app.post('/api/upload', (req, res) => {
+//   const filename = req.body.filename;
+//   console.log(req.body.filename);
+//   const stream = fs.createReadStream(req.body.formData.file).
+//     pipe(bucket.openUploadStream(filename, {
+//       chunkSizeBytes: 1048576
+//     }));
+//   console.log(stream);
+//   //res.json({ file: req.file });
+// });
     
 app.listen(port, () => console.log(`Listening on port: ${port}`) );

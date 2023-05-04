@@ -41,10 +41,6 @@ const UserSchema = new mongoose.Schema({
     },
     phoneNumber: { 
         type: String,
-        required: [
-            true,
-            "Phone number is required"
-        ],
         trim: true,
         validate: {
             validator: val => phoneNumberValidation(val),
@@ -56,14 +52,10 @@ const UserSchema = new mongoose.Schema({
     },
     password: { 
         type: String,
-        required: [
-            true,
-            "Password is required"
-        ],
         trim: true,
         minlength: [5, "Password must be at least 5 characters"]
     },
-    resumeId: { 
+    resumeName: { 
         type: String,
         trim: true,
     },

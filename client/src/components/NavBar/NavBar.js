@@ -79,6 +79,7 @@ const NavBar = (props) => {
         localStorage.removeItem('userId');
         localStorage.removeItem('usertoken');
         localStorage.removeItem('googleId');
+        localStorage.removeItem('phoneNumber');
         loggedOut = true;
         navigate('/signin');
     };
@@ -93,6 +94,7 @@ const NavBar = (props) => {
             localStorage.removeItem('userId');
             localStorage.removeItem('usertoken');
             localStorage.removeItem('googleId');
+            localStorage.removeItem('phoneNumber');
             loggedOut = true;
             navigate('/signin');
         }).catch(err => {
@@ -100,23 +102,39 @@ const NavBar = (props) => {
         })
     }
 
+    const navToProfile = () => {
+        navigate('/profile');
+    }
+
+    const navToSignIn = () => {
+        navigate('/signin');
+    }
+
+    const navToSignUp = () => {
+        navigate('/signup');
+    }
+
+    const navToHome = () => {
+        navigate('/');
+    }
+
   return (
     <MainDiv style={{backgroundColor: "#FFFFFF"}}>
-        <LogoDiv onClick={props.navToHome}>
+        <LogoDiv onClick={navToHome}>
             <H1>LOGO</H1>
         </LogoDiv>
         <ItemsDiv>
-            <VolunteerDiv onClick={props.navToHome}><P>Find Volunteer Work</P></VolunteerDiv>
+            <VolunteerDiv onClick={navToHome}><P>Find Volunteer Work</P></VolunteerDiv>
             {
                 !isLoggedIn ?
                     location.pathname=="/signin"?
-                    (<SignInDiv onClick={props.navToSignUp}><P>Sign Up</P></SignInDiv>):
-                    (<SignInDiv onClick={props.navToSignIn}><P>Sign In</P></SignInDiv>):
+                    (<SignInDiv onClick={navToSignUp}><P>Sign Up</P></SignInDiv>):
+                    (<SignInDiv onClick={navToSignIn}><P>Sign In</P></SignInDiv>):
                 (
                     <DropdownContainer ref={dropdownRef}>
                         <div onClick={toggleDropdown}><FaUser/></div>
                         <DropdownContent show={showDropdown}>
-                            <DropdownItem><P>Profile</P></DropdownItem>
+                            <DropdownItem onClick={navToProfile}><P>Profile</P></DropdownItem>
                             <DropdownItem onClick={logUserOut}><P>Sign Out</P></DropdownItem>
                         </DropdownContent>
                     </DropdownContainer>
@@ -130,14 +148,14 @@ const NavBar = (props) => {
             <FaBars/>
         </Hamburger>
         <Menu style={{ display: showMenu ? 'flex' : 'none' }} ref={menuRef}>
-            <MenuItem onClick={props.navToHome}><P>Find Volunteer Work</P></MenuItem>
+            <MenuItem onClick={navToHome}><P>Find Volunteer Work</P></MenuItem>
             <MenuItem><P>Employers / Post Job</P></MenuItem>
             {
                 !isLoggedIn?
                 location.pathname=="/signin"?
-                (<MenuItem onClick={props.navToSignUp}><P>Sign Up</P></MenuItem>):
-                (<MenuItem onClick={props.navToSignIn}><P>Sign In</P></MenuItem>):
-                (<MenuItem onClick={props.navToSignIn}><P>Profile</P></MenuItem>)
+                (<MenuItem onClick={navToSignUp}><P>Sign Up</P></MenuItem>):
+                (<MenuItem onClick={navToSignIn}><P>Sign In</P></MenuItem>):
+                (<MenuItem onClick={navToProfile}><P>Profile</P></MenuItem>)
             }
             {isLoggedIn && <MenuItem onClick={logUserOut}><P>Sign Out</P></MenuItem>}
         </Menu>
