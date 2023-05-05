@@ -473,19 +473,19 @@ const SignUp = (props) => {
                                 {errors.resumeName && <Error>{errors.resumeName}</Error>}
                             </LabelDiv>
                         </FirstNameDiv>
-                        <LastNameDiv>
-                            <SearchButtonDiv>
-                                <MyButton
-                                    backgroundColor="#000000"
-                                    color="#FFFFFF"
-                                    text="Sign Up"
-                                    width="100%"
-                                    height="100%"
-                                    type="submit"
-                                />
-                            </SearchButtonDiv>
-                        </LastNameDiv>
                     </NamesDiv>
+                    <ButtonDiv>
+                        <GoogleButtonDiv>
+                            <MyButton
+                                backgroundColor="#000000"
+                                color="#FFFFFF"
+                                text="Sign Up"
+                                width="100%"
+                                height="100%"
+                                type="submit"
+                            />
+                        </GoogleButtonDiv>
+                    </ButtonDiv>
                     <P>or</P>
                     <ButtonDiv>
                         <GoogleButtonDiv>

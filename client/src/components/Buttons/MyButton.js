@@ -20,7 +20,7 @@ const MyButton = (props) => {
       disabled={props.disabled}
     >
       {props.icon && (<span style={{marginRight:'8px'}}>{props.icon}</span>)}
-      <span>{props.text}</span>
+      <span><b>{props.text}</b></span>
     </AButton>
   )
 }

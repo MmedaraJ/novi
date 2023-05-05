@@ -62,13 +62,13 @@ export const MainDiv = styled.div`
 `;
 
 export const FirstNameDiv = styled.div`
-    height: 40px;
+    height: 60px;
     display: block;
     margin-right: 0px;
 `;
 
 export const LastNameDiv = styled.div`
-    height: 40px;
+    height: 60px;
     display: block;
     margin-top: 12px;
 
@@ -93,7 +93,7 @@ export const RandTextDiv = styled.div`
 export const InputDiv = styled.div`
     display: flex;
     order: 1;
-    height: 20px;
+    height: 35px;
     border: 1px solid;
     border-color: ${props => props.borderColor};
     border-radius: .5rem;

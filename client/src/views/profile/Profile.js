@@ -678,7 +678,6 @@ const Profile = (props) => {
                             </SearchButtonDiv>
                         </LastNameDivWithButtons>
                     </NamesDiv>
-                    <br></br>
                     <NamesDiv>
                         <FirstNameDiv>
                             <InputDiv
@@ -715,7 +714,6 @@ const Profile = (props) => {
                         </LastNameDivWithButtons>
                     </NamesDiv>
                     {success.phoneNumberVerification && <Success>{success.phoneNumberVerification}</Success>}
-                    <br></br>
                     <br></br>
                     <NamesDiv>
                         <FirstNameDiv>

@@ -64,15 +64,15 @@ export const MainDiv = styled.div`
 `;
 
 export const FirstNameDiv = styled.div`
-    height: 40px;
+    height: 60px;
     display: block;
     margin-right: 0px;
 `;
 
 export const LastNameDiv = styled.div`
-    height: 40px;
+    height: 60px;
     display: block;
-    margin-top: 16px;
+    margin-top: 12px;
 
     @media screen and (max-width: 425px) {
         margin-top: 12px;
@@ -95,7 +95,7 @@ export const RandTextDiv = styled.div`
 export const InputDiv = styled.div`
     display: flex;
     order: 1;
-    height: 20px;
+    height: 35px;
     border: 1px solid;
     border-color: ${props => props.borderColor};
     border-radius: .5rem;
@@ -148,8 +148,11 @@ export const ResumeText = styled.p`
     color: #000000;
     font-size: small;
     text-align: center;
-    padding: 0px;
-    margin: 0px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 7px;
+    padding-right: 8px;
+    padding-left: 4px;
 `;
 
 export const ResumeNameText = styled.p`
@@ -202,15 +205,11 @@ export const SelectedFile = styled.div`
 
 export const UploadButton = styled.label`
   display: inline-block;
-  margin-top: 8px;
-  margin-bottom: 4px;
-  margin-left: 4px;
-  padding-right: 8px;
   border-right: ${props => props.borderColor} solid 1px;
   cursor: pointer;
   align-items: center;
   justify-content: center;
-  height: 100%;
+  height: 30px;
 
   &:hover {
     background-color: none;
@@ -233,6 +232,7 @@ export const GoogleButtonDiv = styled.div`
     align-items: center;
     justify-content: center;
     width: 100%;
+    margin-top: 0px;
 `;
 
 export const ButtonDiv = styled.div`
@@ -241,6 +241,7 @@ export const ButtonDiv = styled.div`
     height: 45px;
     align-items: center;
     justify-content: center;
+    margin-top: 0px;
 `;
 
 export const MyPhoneInput = styled(PhoneInput)`
