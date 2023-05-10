@@ -35,6 +35,7 @@ app.use(
 );
 
 require('./server/routes/user.routes')(app);
+require('./server/routes/job.routes')(app);
 
 // Configure multer storage (you can also use multer's memoryStorage for in-memory storage)
 const storage = multer.diskStorage({

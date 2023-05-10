@@ -14,6 +14,7 @@ import {
 import MyButton from '../Buttons/MyButton';
 import Filter from '../Filter/Filter';
 import { FaSearch, FaLocationArrow } from 'react-icons/fa';
+import { MdPlace } from 'react-icons/md';
 
 const SearchBar = (props) => {
     const [state, setState] = useState({
@@ -65,7 +66,7 @@ const SearchBar = (props) => {
                         />
                     </TitleInputDiv>
                     <LocationInputDiv>
-                        <LocationIconDiv><FaLocationArrow/></LocationIconDiv>
+                        <LocationIconDiv><MdPlace/></LocationIconDiv>
                         <TextInput
                             name='jobLocation'
                             type='text'

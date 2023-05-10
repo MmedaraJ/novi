@@ -259,6 +259,7 @@ const SignIn = (props) => {
                                     name='password'
                                     type={isPasswordVisible ? 'text' : 'password'}
                                     placeholder='Password'
+                                    minLength={5}
                                     value={state.password}
                                     onChange={onInputChanged}
                                 />

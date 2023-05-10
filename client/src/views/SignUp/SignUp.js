@@ -410,6 +410,7 @@ const SignUp = (props) => {
                                     name='password'
                                     type={isPasswordVisible ? 'text' : 'password'}
                                     placeholder='Password'
+                                    minLength={5}
                                     value={state.password}
                                     onChange={onInputChanged}
                                 />
@@ -430,6 +431,7 @@ const SignUp = (props) => {
                                     name='confirmPassword'
                                     type={isPasswordVisible ? 'text' : 'password'}
                                     placeholder='Confirm Password'
+                                    minLength={5}
                                     value={state.confirmPassword}
                                     onChange={onInputChanged}
                                 />
