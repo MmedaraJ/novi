@@ -13,19 +13,25 @@ const GridContainer = styled.div`
 
 const SearchResultsView = (props) => {
     return(
-        <GridContainer>
+        <>
             {
                 props.jobs.length > 0?
-                props.jobs.map((job, i) => (
-                    <JobPost
-                        job={job._source? job._source: job}
-                        index={i}
-                        key={i}
-                    />
-                )):
-                <P>Nothing to show here yet</P>
+                <GridContainer>
+                    {
+                        props.jobs.map((job, i) => (
+                            <JobPost
+                                job={job._source? job._source: job}
+                                selectedOptions={props.selectedOptions}
+                                handleJobDivClick={props.handleJobDivClick}
+                                index={i}
+                                key={i}
+                            />
+                        ))
+                    }
+                </GridContainer>:
+                <P style={{padding: "1rem"}}>Nothing to show here yet</P>
             }
-        </GridContainer>
+        </>
     );
 }
 

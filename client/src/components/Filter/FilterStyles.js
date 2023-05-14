@@ -21,6 +21,7 @@ export const MainSelect = styled.select`
     padding-right: 24px;
     -moz-appearance: none;
     -webkit-appearance: none;
+    cursor: pointer;
 
     &:focus {
       outline: none;

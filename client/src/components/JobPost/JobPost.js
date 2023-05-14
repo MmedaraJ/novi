@@ -44,6 +44,7 @@ const JobPost = (props) => {
 
     const handleDivClick = () => {
         setVisible(!isVisible);
+        props.handleJobDivClick(props.job._id);
     };
 
     const handleExpandClick = (event) => {
@@ -79,18 +80,154 @@ const JobPost = (props) => {
             <LocationDiv>
                 <SP><MdPlace style={{color: "black"}}/> {props.job.complete_location}</SP>
             </LocationDiv>
-            <DescriptionSummaryDiv>
-                {
-                    props.job.description_summary.map((desc, i) => (
-                        <Wrapper key={i}>
-                            <IconDiv>
-                                <IoIosArrowForward/>
-                            </IconDiv>
-                            <LP>{desc}</LP>
-                        </Wrapper>
-                    ))
-                }
-            </DescriptionSummaryDiv>
+            {
+                props.selectedOptions.length === 0?
+                <DescriptionSummaryDiv>
+                    {
+                        props.job.description_summary.map((desc, i) => (
+                            <Wrapper key={i}>
+                                <IconDiv>
+                                    <IoIosArrowForward/>
+                                </IconDiv>
+                                <LP>{desc}</LP>
+                            </Wrapper>
+                        ))
+                    }
+                </DescriptionSummaryDiv>:
+                <>
+                    {
+                        props.selectedOptions.includes('Summary') &&
+                        <DescriptionSummaryDiv>
+                            {
+                                props.selectedOptions.length > 1 &&
+                                <h5>Summary</h5>
+                            }
+                            {
+                                props.job.description_summary.map((desc, i) => (
+                                    <Wrapper key={i}>
+                                        <IconDiv>
+                                            <IoIosArrowForward/>
+                                        </IconDiv>
+                                        <LP>{desc}</LP>
+                                    </Wrapper>
+                                ))
+                            }
+                        </DescriptionSummaryDiv>
+                    }
+                    {
+                        props.selectedOptions.includes('Responsibilities') &&
+                        <DescriptionSummaryDiv>
+                            <h5>Responsibilities</h5>
+                            {
+                                props.job.responsibilities.map((desc, i) => (
+                                    <Wrapper key={i}>
+                                        <IconDiv>
+                                            <IoIosArrowForward/>
+                                        </IconDiv>
+                                        <LP>{desc}</LP>
+                                    </Wrapper>
+                                ))
+                            }
+                        </DescriptionSummaryDiv>
+                    }
+                    {
+                        props.selectedOptions.includes('Qualifications') &&
+                        <DescriptionSummaryDiv>
+                            <h5>Qualifications</h5>
+                            {
+                                props.job.qualifications.map((desc, i) => (
+                                    <Wrapper key={i}>
+                                        <IconDiv>
+                                            <IoIosArrowForward/>
+                                        </IconDiv>
+                                        <LP>{desc}</LP>
+                                    </Wrapper>
+                                ))
+                            }
+                        </DescriptionSummaryDiv>
+                    }
+                    {
+                        props.selectedOptions.includes('Benefits') &&
+                        <DescriptionSummaryDiv>
+                            <h5>Benefits</h5>
+                            {
+                                props.job.benefits.map((desc, i) => (
+                                    <Wrapper key={i}>
+                                        <IconDiv>
+                                            <IoIosArrowForward/>
+                                        </IconDiv>
+                                        <LP>{desc}</LP>
+                                    </Wrapper>
+                                ))
+                            }
+                        </DescriptionSummaryDiv>
+                    }
+                    {
+                        props.selectedOptions.includes('Schedule') &&
+                        <DescriptionSummaryDiv>
+                            <h5>Schedule</h5>
+                            {
+                                props.job.schedule.map((desc, i) => (
+                                    <Wrapper key={i}>
+                                        <IconDiv>
+                                            <IoIosArrowForward/>
+                                        </IconDiv>
+                                        <LP>{desc}</LP>
+                                    </Wrapper>
+                                ))
+                            }
+                        </DescriptionSummaryDiv>
+                    }
+                    {
+                        props.selectedOptions.includes('Experience') &&
+                        <DescriptionSummaryDiv>
+                            <h5>Experience</h5>
+                            {
+                                props.job.experience.map((desc, i) => (
+                                    <Wrapper key={i}>
+                                        <IconDiv>
+                                            <IoIosArrowForward/>
+                                        </IconDiv>
+                                        <LP>{desc}</LP>
+                                    </Wrapper>
+                                ))
+                            }
+                        </DescriptionSummaryDiv>
+                    }
+                    {
+                        props.selectedOptions.includes('Language') &&
+                        <DescriptionSummaryDiv>
+                            <h5>Language</h5>
+                            {
+                                props.job.language_requirement.map((desc, i) => (
+                                    <Wrapper key={i}>
+                                        <IconDiv>
+                                            <IoIosArrowForward/>
+                                        </IconDiv>
+                                        <LP>{desc}</LP>
+                                    </Wrapper>
+                                ))
+                            }
+                        </DescriptionSummaryDiv>
+                    }
+                    {
+                        props.selectedOptions.includes('Certification') &&
+                        <DescriptionSummaryDiv>
+                            <h5>Certification</h5>
+                            {
+                                props.job.certification.map((desc, i) => (
+                                    <Wrapper key={i}>
+                                        <IconDiv>
+                                            <IoIosArrowForward/>
+                                        </IconDiv>
+                                        <LP>{desc}</LP>
+                                    </Wrapper>
+                                ))
+                            }
+                        </DescriptionSummaryDiv>
+                    }
+                </>
+            }
             {
                 props.job.urgently_hiring?
                 <BottomLeftDiv>
@@ -106,11 +243,11 @@ const JobPost = (props) => {
             }
             {
                 props.job.show_compensation &&
-                props.job.compensation && 
+                props.job.hourly_compensation?
                 <PayDiv>
                     <SP>
                         <FaMoneyBill style={{color: "black"}}/>&nbsp;
-                        {(props.job.compensation/100).toLocaleString('en-CA', { style: 'currency', currency: 'CAD' })}
+                        {(props.job.hourly_compensation/100).toLocaleString('en-CA', { style: 'currency', currency: 'CAD' })}
                         {
                             props.job.compensation_frequency &&
                             props.job.compensation_frequency === "yearly"?
@@ -126,6 +263,13 @@ const JobPost = (props) => {
                             props.job.compensation_frequency === "hourly" &&
                             "/hr"
                         }
+                    </SP>
+                </PayDiv>:
+                <PayDiv>
+                    <SP>
+                        <FaMoneyBill style={{color: "black"}}/>&nbsp;
+                        {(props.job.yearly_compensation/100).toLocaleString('en-CA', { style: 'currency', currency: 'CAD' })}
+                        {"/yr" }
                     </SP>
                 </PayDiv>
             }

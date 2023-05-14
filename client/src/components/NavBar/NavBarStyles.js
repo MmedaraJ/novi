@@ -21,6 +21,7 @@ export const MainDiv = styled.div`
 export const LogoDiv = styled.div`
     flex: 1;
     height: max;
+    cursor: pointer;
 
     @media screen and (max-width: 768px) {
       margin-left: 20px;
@@ -45,6 +46,7 @@ export const EmployerDiv = styled.div`
     flex: 1;
     border-left: 1px solid black;
     height: max;
+    cursor: pointer;
 
     @media screen and (max-width: 768px) {
       display: none;
@@ -54,6 +56,7 @@ export const EmployerDiv = styled.div`
 export const VolunteerDiv = styled.div`
     order: 0;
     height: max;
+    cursor: pointer;
 
     &:hover{
       font-weight: bold;
@@ -67,6 +70,7 @@ export const VolunteerDiv = styled.div`
 export const SignInDiv = styled.div`
     order: 1;
     height: max;
+    cursor: pointer;
 
     &:hover{
       font-weight: bold;
@@ -132,6 +136,7 @@ export const Hamburger = styled.div`
 export const DropdownContainer = styled.div`
   position: relative;
   display: inline-block;
+    cursor: pointer;
 `;
 
 export const DropdownButton = styled.button`

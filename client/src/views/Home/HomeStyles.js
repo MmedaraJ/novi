@@ -9,20 +9,24 @@ export const P = styled.p`
   font-size: small;
 `;
 
-export const ScrollToTopButton = styled.button`
+export const ScrollToTopDiv = styled.div`
     position: fixed;
     bottom: 20px;
     right: 20px;
+    padding: 5px;
+    background-color: #ffffff;
+    border: 1px solid #000000;
+    border-radius: .5rem;
+    width: 20px;
     display: ${({ isVisible }) => (isVisible ? "block" : "none")};
 `;
 
-export const ApplyButton = styled.button`
+export const ApplyDiv = styled.div`
     position: fixed;
     bottom: 20px;
     left: 20px;
     background-color: #000000;
     color: #FFFFFF;
-    padding: 5px;
     border: none;
     border-radius: .5rem;
 `;

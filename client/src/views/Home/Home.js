@@ -8,19 +8,27 @@ import {
   useNavigate
 } from "react-router-dom";
 import { 
-  ApplyButton,
-  H1, P, RandDiv, ScrollToTopButton
+  ApplyDiv,
+  H1, P, RandDiv, ScrollToTopDiv
 } from './HomeStyles';
+import { FaArrowUp } from 'react-icons/fa';
+import { MdSort } from "react-icons/md";
 import NavBar from '../../components/NavBar/NavBar';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import RichTextEditor from '../RichTextEditor';
 import SearchResultsView from '../../components/SearchResultsView/SearchResultsView';
+import SummaryFilter from '../../components/SummaryFilter/SummaryFilter';
+import MyButton from '../../components/Buttons/MyButton';
 
 const Home = (props) => {
   const [isVisible, setIsVisible] = useState(false);
   const [dateSort, setDateSort] = useState(false);
   const [jobs, setJobs] = useState([]);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [selectedOptions, setSelectedOptions] = useState(['Summary']);
+  const [selectedJobIds, setSelectedJobIds] = useState([]);
   const navigate = useNavigate();
+  const PAGE_SIZE = 50;
   const [state, setState] = useState({
     keyword: "",
     location: ""
@@ -45,26 +53,45 @@ const Home = (props) => {
   }, []);
 
   useEffect(() => {
+    console.log(`Clicked jobs: ${selectedJobIds}`);
+  }, [selectedJobIds]);
+
+  useEffect(() => {
     if(state.keyword || state.location){
-      searchJobs();
+      setJobs([]);
+      setPageNumber(1);
+      getJobsBasedOnSearch();
     }else{
       getAllJobs();
     }
   }, [optionStates]);
 
+  useEffect(() => {
+    if(state.keyword || state.location){
+      getJobsBasedOnSearch();
+    }else{
+      getAllJobs();
+    }
+  }, [pageNumber]);
+
   const getAllJobs = () => {
     axios.get('http://localhost:8000/api/jobs/getAll')
     .then(res => {
-        console.log(res);
-        setJobs(res.data);
+      console.log(res);
+      setJobs(res.data);
     }).catch(err => {
-        console.log(err);
+      console.log(err);
     });
   }
 
   const handleScroll = () => {
+    //used for scroll to top button
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     setIsVisible(scrollTop > 0);
+
+    //used for pagination
+    if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight) return;
+    setPageNumber(prevPageNum => prevPageNum + 1);
   };
 
   const handleScrollToTopClick = () => {
@@ -80,7 +107,10 @@ const Home = (props) => {
     }
   }
 
-  const searchJobs = () => {
+  /**
+   * Search for the next (PAGE_SIZE) jobs.
+   */
+  const getJobsBasedOnSearch = () => {
     axios.get('http://localhost:8000/api/jobs/search', {
       params: {
         keyword: state.keyword,
@@ -91,17 +121,11 @@ const Home = (props) => {
         job_language: optionStates.job_language,
         salary_estimate: optionStates.salary_estimate,
         date_posted: optionStates.date_posted,
+        pageSize: PAGE_SIZE,
+        pageNumber: pageNumber
       }}).then(response => {
         console.log(response.data);
-        setJobs(response.data.jobs.hits.hits);
-        if(response.data.jobs.hits.hits.length > 0){
-          console.log(response.data.jobs.hits.hits[0]._source);
-          setJobs(response.data.jobs.hits.hits);
-        }else{
-          if(response.data.jobs.hits.hits.length < 1){
-            //getAllJobs();
-          }
-        }
+        setJobs(prevJobs => [...prevJobs, ...response.data.jobs.hits.hits]);
       }).catch(err => {
         console.log(err);
       });
@@ -110,7 +134,9 @@ const Home = (props) => {
   const onSubmitHandler = (e) => {
     e.preventDefault();
     if(state.keyword || state.location){
-      searchJobs();
+      setJobs([]);
+      setPageNumber(1);
+      getJobsBasedOnSearch();
     }else{
       getAllJobs();
     }
@@ -231,6 +257,23 @@ const Home = (props) => {
     setJobs(sortedJobs);
     setDateSort(true);
   }
+  
+  const handleSelect = (option) => {
+    setSelectedOptions((prev) =>
+      prev.includes(option)
+        ? prev.filter((prevOption) => prevOption !== option)
+        : [...prev, option]
+    );
+  };
+  
+  const handleJobDivClick = (jobId) => {
+    setSelectedJobIds((prev) =>
+      prev.includes(jobId)
+        ? prev.filter((prevJob) => prevJob !== jobId)
+        : [...prev, jobId]
+    );
+    console.log(`Clicked Job Id: ${jobId}`);
+  };
 
   return (
     <div>
@@ -242,21 +285,28 @@ const Home = (props) => {
         state={state}
       />
       <br></br>
-      <br></br>
+      {
+        jobs.length > 0 && 
+        <SummaryFilter
+          handleSelect={handleSelect}
+          selectedOptions={selectedOptions}
+        />
+      }
       {
         jobs.length > 0 && jobs[0]._source && 
         <div>
           <P>
+            <MdSort/>&nbsp;
             Sort&nbsp;by&nbsp;
-            <span onClick={sortJobsByRelevance}>
+            <span onClick={sortJobsByRelevance} style={{cursor: "pointer"}}>
               {
                 dateSort?
                 <u>relevance</u>:
                 <b>relevance</b>
               }
-            </span> 
+            </span>
             &nbsp;or&nbsp;
-            <span onClick={sortJobsByDate}>
+            <span onClick={sortJobsByDate} style={{cursor: "pointer"}}>
               {
                 dateSort?
                 <b>date</b>:
@@ -268,6 +318,8 @@ const Home = (props) => {
       }
       <SearchResultsView
         jobs={jobs}
+        selectedOptions={selectedOptions}
+        handleJobDivClick={handleJobDivClick}
       />
       <p onClick={st}>sdsdsdsds</p>
       <br></br>
@@ -340,12 +392,22 @@ const Home = (props) => {
       <br></br>
       <br></br>
       <RichTextEditor/>
-      <ScrollToTopButton isVisible={isVisible} onClick={handleScrollToTopClick}>
-        Scroll to Top
-      </ScrollToTopButton>
-      <ApplyButton>
-        Apply
-      </ApplyButton>
+      <ScrollToTopDiv isVisible={isVisible} onClick={handleScrollToTopClick}>
+        <FaArrowUp/>
+      </ScrollToTopDiv>
+      {
+        //use selectedJobs array here later
+        jobs.length > 0 && 
+        <ApplyDiv>
+          <MyButton
+            backgroundColor="#000000"
+            color="#FFFFFF"
+            text="Apply"
+            width="50px"
+            height="30px"
+          />
+        </ApplyDiv>
+      }
     </div>
   )
 }

@@ -4,104 +4,104 @@ const { Client } = require('@elastic/elasticsearch');
 const client = new Client({ node: 'http://localhost:9200' });
 
 module.exports.createJob = (request, response) => {
-    console.log("request body: " + (JSON.stringify(request.body)));
-    const {
-        title,
-        location_type,
-        country,
-        province,
-        city,
-        complete_location,
-        types,
-        category,
-        intro,
-        responsibilities,
-        qualifications,
-        extra_description,
-        benefits,
-        schedule,
-        experience,
-        language_requirement,
-        certification,
-        description,
-        description_summary,
-        currency,
-        compensation_frequency,
-        yearly_compensation,
-        hourly_compensation,
-        max_hourly_compensation,
-        max_yearly_compensation,
-        range,
-        compensation_info,
-        show_compensation,
-        urgently_hiring,
-        start_date,
-        expiry_date,
-        company_name,
-        company_url,
-        company_logo_url,
-        company_email,
-        application_instruction,
-        upgrade,
-    } = request.body;
+  console.log("request body: " + (JSON.stringify(request.body)));
+  const {
+    title,
+    location_type,
+    country,
+    province,
+    city,
+    complete_location,
+    types,
+    category,
+    intro,
+    responsibilities,//
+    qualifications,//
+    extra_description,
+    benefits,//
+    schedule,//
+    experience,//
+    language_requirement,//
+    certification,//
+    description,//
+    description_summary,//
+    currency,
+    compensation_frequency,
+    yearly_compensation,
+    hourly_compensation,
+    max_hourly_compensation,
+    max_yearly_compensation,
+    range,
+    compensation_info,
+    show_compensation,
+    urgently_hiring,
+    start_date,
+    expiry_date,
+    company_name,
+    company_url,
+    company_logo_url,
+    company_email,
+    application_instruction,
+    upgrade,
+  } = request.body;
 
-    Job.create({
-        title,
-        location_type,
-        country,
-        province,
-        city,
-        complete_location,
-        types,
-        category,
-        intro,
-        responsibilities,
-        qualifications,
-        extra_description,
-        benefits,
-        schedule,
-        experience,
-        language_requirement,
-        certification,
-        description,
-        description_summary,
-        currency,
-        compensation_frequency,
-        yearly_compensation,
-        hourly_compensation,
-        max_hourly_compensation,
-        max_yearly_compensation,
-        range,
-        compensation_info,
-        show_compensation,
-        urgently_hiring,
-        start_date,
-        expiry_date,
-        company_name,
-        company_url,
-        company_logo_url,
-        company_email,
-        application_instruction,
-        upgrade
-    }).then(job => {
-        response.json(job);
-        console.log(job);
-    }).catch(err => {
-        console.log(err);
-        response.status(400).json(err);
-    });
+  Job.create({
+    title,
+    location_type,
+    country,
+    province,
+    city,
+    complete_location,
+    types,
+    category,
+    intro,
+    responsibilities,
+    qualifications,
+    extra_description,
+    benefits,
+    schedule,
+    experience,
+    language_requirement,
+    certification,
+    description,
+    description_summary,
+    currency,
+    compensation_frequency,
+    yearly_compensation,
+    hourly_compensation,
+    max_hourly_compensation,
+    max_yearly_compensation,
+    range,
+    compensation_info,
+    show_compensation,
+    urgently_hiring,
+    start_date,
+    expiry_date,
+    company_name,
+    company_url,
+    company_logo_url,
+    company_email,
+    application_instruction,
+    upgrade
+  }).then(job => {
+    response.json(job);
+    console.log(job);
+  }).catch(err => {
+    console.log(err);
+    response.status(400).json(err);
+  });
 }
 
 module.exports.getAllJobs = (request, response) => {
-    Job.find({})
-        .then(jobs => response.json(jobs))
-        .catch(err => console.log(err));
+  Job.find({})
+    .then(jobs => response.json(jobs))
+    .catch(err => console.log(err));
 }
 
 module.exports.deleteAllJobs = (request, response) => {
-    Job.deleteMany({})
-        .then(res => console.log(`All jobs deleted\n${res}`))
-        .catch(err => console.log(err));
+  Job.deleteMany({})
+    .then(res => console.log(`All jobs deleted\n${res}`))
+    .catch(err => console.log(err));
 }
 
 module.exports.searchJobs = (request, response) => {
@@ -114,7 +114,8 @@ module.exports.searchJobs = (request, response) => {
     job_language,
     salary_estimate,
     date_posted,
-    date_sort
+    pageSize,
+    pageNumber
   } = request.query;
 
   const must = [];
@@ -169,8 +170,6 @@ module.exports.searchJobs = (request, response) => {
       "fields": boostedLocationFields
     } 
   });
-
-  //const must = [];
 
   let gte = "";
   let lte = "";
@@ -254,10 +253,11 @@ module.exports.searchJobs = (request, response) => {
   client.search({
     index: 'jobs',
     body: {
+      "from": (pageNumber - 1) * pageSize,
+      "size": pageSize,
       "query": {
         "bool": {
           "must": must,
-          //"filter": must
         }
       }
     }

@@ -11,10 +11,12 @@ export const JobDiv = styled.div`
     break-inside: avoid;
     margin-bottom: 1rem;
     box-sizing: border-box;
+    cursor: pointer;
 `;
 
 export const TitleDiv = styled.div`
     position: relative;
+    padding-top: 4px;
     ::after {
         content: "";
         position: absolute;
@@ -29,6 +31,7 @@ export const CheckIcon = styled(FaCheck)`
   position: absolute;
   top: 10px;  // adjust this for the desired margin from the top
   right: 10px;  // adjust this for the desired margin from the right
+  cursor: pointer;
 `;
 
 export const CompanyNameDiv = styled.div`
@@ -124,4 +127,5 @@ export const Wrapper = styled.div`
 
 export const IconDiv = styled.div`
   margin-right: 10px; /* add some spacing between the icon div and the <p> tag */
+  cursor: pointer;
 `;

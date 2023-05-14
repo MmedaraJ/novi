@@ -124,28 +124,28 @@ const PopUpJobPost = (props) => {
                     props.job.responsibilities &&
                         <DescDiv>
                             <JDText>Responsibilities</JDText>
-                                {props.job.responsibilities.map((text, i) => (
-                                    <Wrapper key={i}>
-                                        <IconDiv>
-                                            <IoIosArrowForward/>
-                                        </IconDiv>
-                                        <SP>{text}</SP>
-                                    </Wrapper>
-                                ))}
+                            {props.job.responsibilities.map((text, i) => (
+                                <Wrapper key={i}>
+                                    <IconDiv>
+                                        <IoIosArrowForward/>
+                                    </IconDiv>
+                                    <SP>{text}</SP>
+                                </Wrapper>
+                            ))}
                         </DescDiv>
                 }
                 {
                     props.job.qualifications &&
                         <DescDiv>
                             <JDText>Qualifications</JDText>
-                                {props.job.qualifications.map((text, i) => (
-                                    <Wrapper key={i}>
-                                        <IconDiv>
-                                            <IoIosArrowForward/>
-                                        </IconDiv>
-                                        <SP>{text}</SP>
-                                    </Wrapper>
-                                ))}
+                            {props.job.qualifications.map((text, i) => (
+                                <Wrapper key={i}>
+                                    <IconDiv>
+                                        <IoIosArrowForward/>
+                                    </IconDiv>
+                                    <SP>{text}</SP>
+                                </Wrapper>
+                            ))}
                         </DescDiv>
                 }
                 {
