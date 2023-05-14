@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   BrowserRouter as Router,
   Link,
@@ -6,17 +6,43 @@ import {
   useRoutes,
   useNavigate
 } from "react-router-dom";
-import { FaCaretDown } from 'react-icons/fa';
-import { MainSelect, Option } from './FilterStyles';
+import { FiX } from 'react-icons/fi';
+import { CloseButton, MainSelect, Option, SelectContainer } from './FilterStyles';
 
 const Filter = (props) => {
+  const [selectedOption, setSelectedOption] = useState("");
+
+  const handleSelectChange = (event) => {
+    setSelectedOption(event.target.value);
+    props.onFilterChange(props.name, event.target.value);
+  }
+
+  const handleClearSelect = () => {
+    setSelectedOption("");
+    props.onFilterChange(props.name, "");
+  }
+
   return (
-    <MainSelect>
-      <Option value="">{props.title}</Option>
-      <Option value="option1">Option 1</Option>
-      <Option value="option2">Option 2</Option>
-      <Option value="option3">Option 3</Option>
-    </MainSelect>
+    <SelectContainer>
+      <MainSelect
+        value={selectedOption}
+        onChange={handleSelectChange}
+        selectedOption={selectedOption}
+      >
+        {!selectedOption && <Option value="">{props.title}</Option>}
+        {
+          props.options && props.options.map((option, i) => {
+            return (<Option key={i} value={option.value}>{option.text}</Option>);
+          })
+        }
+      </MainSelect>
+      {
+        selectedOption && 
+        <CloseButton onClick={handleClearSelect}>
+          &nbsp;&nbsp; <FiX/>
+        </CloseButton>
+      }
+    </SelectContainer>
   )
 }
 

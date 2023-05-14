@@ -127,6 +127,7 @@ export const FilterDiv = styled.div`
     padding-right: 10%;
     margin-top: 1.25rem;
     overflow-x: auto;
+    white-space: nowrap;
 
     @media screen and (max-width: 768px) {
         margin-top: 0rem;

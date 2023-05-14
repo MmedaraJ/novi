@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import JobPost from '../JobPost/JobPost';
+import { P } from './SearchResultsViewStyles';
 
 const GridContainer = styled.div`
     column-width: 250px;
@@ -10,28 +11,20 @@ const GridContainer = styled.div`
     width: max;
 `;
 
-const SearchResultsView = () => {
-    const [jobs, setJobs] = useState([]);
-
-    useEffect(() => {
-        axios.get('http://localhost:8000/api/jobs/getAll')
-        .then(res => {
-            console.log(res);
-            setJobs(res.data);
-        }).catch(err => {
-            console.log(err);
-        });
-    }, []);
-
+const SearchResultsView = (props) => {
     return(
         <GridContainer>
-            {jobs.map((job, i) => (
-                <JobPost
-                    job={job}
-                    index={i}
-                    key={i}
-                />
-            ))}
+            {
+                props.jobs.length > 0?
+                props.jobs.map((job, i) => (
+                    <JobPost
+                        job={job._source? job._source: job}
+                        index={i}
+                        key={i}
+                    />
+                )):
+                <P>Nothing to show here yet</P>
+            }
         </GridContainer>
     );
 }

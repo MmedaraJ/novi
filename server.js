@@ -13,6 +13,8 @@ const {GridFsStorage} = require('multer-gridfs-storage');
 const mongodb = require('mongodb');
 const fs = require('fs');
 const path = require('path');
+const { Client } = require('@elastic/elasticsearch');
+const client = new Client({ node: 'http://localhost:9200' });
 
 require('./server/config/mongoose.config');
 require('dotenv').config();
@@ -73,6 +75,75 @@ app.get('/api/download/:filename', (req, res) => {
     readStream.pipe(res);
   });
 });
+
+// client.indices.delete({index: 'jobs'}, function(err, res) {
+//   if (err) {
+//     console.error(err.message);
+//   } else {
+//     console.log('Indexes have been deleted!', res);
+//   }
+// });
+
+// client.indices.exists({index: 'jobs'}, function(err, res) {
+//   if (res) {
+//     console.log('Index already exists');
+//   } else {
+//     // proceed to create index
+    // client.indices.create({ 
+    //   index: 'jobs',
+    //   body: {
+    //     mappings: {
+    //       properties: {
+    //         title: { type: 'text' },
+    //         location_type: {type: 'text'},
+    //         country: {type: 'text'},
+    //         province: {type: 'text'},
+    //         city: {type: 'text'},
+    //         complete_location: {type: 'text'},
+    //         types: {type: 'text'},
+    //         category: {type: 'text'},
+    //         intro: {type: 'text'},
+    //         responsibilities: {type: 'text'},
+    //         qualifications: {type: 'text'},
+    //         extra_description: {type: 'text'},
+    //         benefits: {type: 'text'},
+    //         schedule: {type: 'text'},
+    //         experience: {type: 'text'},
+    //         language_requirement: {type: 'text'},
+    //         certification: {type: 'text'},
+    //         description: {type: 'text'},
+    //         description_summary: {type: 'text'},
+    //         currency: {type: 'text'},
+    //         compensation_frequency: {type: 'text'},
+    //         yearly_compensation: {type: 'integer'},
+    //         hourly_compensation: {type: 'integer'},
+    //         max_hourly_compensation: {type: 'integer'},
+    //         max_yearly_compensation: {type: 'integer'},
+    //         range: {type: 'boolean'},
+    //         compensation_info: {type: 'text'},
+    //         show_compensation: {type: 'boolean'},
+    //         urgently_hiring: {type: 'boolean'},
+    //         start_date: {type: 'date'},
+    //         expiry_date: {type: 'date'},
+    //         company_name: {type: 'text'},
+    //         company_url: {type: 'text'},
+    //         company_logo_url: {type: 'text'},
+    //         company_email: {type: 'text'},
+    //         application_instruction: {type: 'text'},
+    //         upgrade: {type: 'text'},
+    //       }
+    //     }
+    //   }
+    // }, (err, resp, status) => {
+    //   if (err) {
+    //     console.log(err);
+    //   }
+    //   else {
+    //     console.log("create", resp);
+    //   }
+    // });
+  //}
+// });
 
 // const db = mongoose.connection.getClient().db('practimatch');
 // const bucket = new mongodb.GridFSBucket(db, {bucketName: "uploads"});

@@ -124,7 +124,7 @@ const NavBar = (props) => {
             <H1>LOGO</H1>
         </LogoDiv>
         <ItemsDiv>
-            <VolunteerDiv onClick={navToHome}><P>Find Volunteer Work</P></VolunteerDiv>
+            <VolunteerDiv onClick={navToHome}><P>Find jobs</P></VolunteerDiv>
             {
                 !isLoggedIn ?
                     location.pathname=="/signin"?
@@ -148,7 +148,7 @@ const NavBar = (props) => {
             <FaBars/>
         </Hamburger>
         <Menu style={{ display: showMenu ? 'flex' : 'none' }} ref={menuRef}>
-            <MenuItem onClick={navToHome}><P>Find Volunteer Work</P></MenuItem>
+            <MenuItem onClick={navToHome}><P>Find jobs</P></MenuItem>
             <MenuItem><P>Employers / Post Job</P></MenuItem>
             {
                 !isLoggedIn?

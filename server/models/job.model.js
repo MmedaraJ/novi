@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const { Client } = require('@elastic/elasticsearch');
+const client = new Client({ node: 'http://localhost:9200' });
 const URL_REGEX = /^(ftp|http|https):\/\/[^ "]+$/;
 const EMAIL_REGEX = /^([\w-\.]+@([\w-]+\.)+[\w-]+)?$/;
 
@@ -19,6 +21,7 @@ const JobSchema = new mongoose.Schema({
         ],
         trim: true,
     },
+    //onsite, remote, hybrid,
     location_type: {
         type: String,
         required: [
@@ -43,6 +46,8 @@ const JobSchema = new mongoose.Schema({
         type: String,
         trim: true
     },
+    //full time, part time, casual, seasonal, contract, 
+    //temporary, permanent, internship, voluntary, apprentiship, practicum
     types: { 
         type: [String],
         required: [
@@ -109,7 +114,15 @@ const JobSchema = new mongoose.Schema({
         type: String,
         trim: true
     },
-    compensation: { 
+    yearly_compensation: { 
+        type: Number,
+        trim: true,
+        validate: {
+            validator: Number.isInteger,
+            message: 'Must be an integer',
+        },
+    },
+    hourly_compensation: { 
         type: Number,
         trim: true,
         validate: {
@@ -121,7 +134,15 @@ const JobSchema = new mongoose.Schema({
         type: Boolean,
         required: true,
     },
-    max_compensation: { 
+    max_hourly_compensation: { 
+        type: Number,
+        trim: true,
+        validate: {
+            validator: val => Number.isInteger(val),
+            message: 'Must be an integer',
+        },
+    },
+    max_yearly_compensation: { 
         type: Number,
         trim: true,
         validate: {
@@ -193,4 +214,26 @@ const JobSchema = new mongoose.Schema({
     },
 }, { timestamps: true });
 
+JobSchema.post('save', function() {
+    const job = this.toObject();
+    job.doc_id = job._id.toString(); // Rename _id to doc_id
+    delete job._id;  // remove the _id field
+
+    client.index({
+      index: 'jobs',
+      body: job,
+    }, (err) => {
+      if (err) console.log(err);
+    });
+});
+  
+JobSchema.post('remove', function(doc) {
+    client.delete({
+        index: 'jobs',
+        id: doc._id.toString(),
+    }, (err) => {
+        if (err) console.log(err);
+    });
+});
+  
 module.exports.Job = mongoose.model('Job', JobSchema);

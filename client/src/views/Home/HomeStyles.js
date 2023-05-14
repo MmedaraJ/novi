@@ -4,6 +4,11 @@ export const H1 = styled.h1`
     color: red;
 `;
 
+export const P = styled.p`
+  text-align: center;
+  font-size: small;
+`;
+
 export const ScrollToTopButton = styled.button`
     position: fixed;
     bottom: 20px;
