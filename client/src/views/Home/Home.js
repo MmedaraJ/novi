@@ -290,7 +290,7 @@ const Home = (props) => {
         console.log(err);
       });
     });
-    
+
     setSelectedJobIds([]);
     setApplyText("Submitted");
   }
@@ -418,7 +418,7 @@ const Home = (props) => {
       </ScrollToTopDiv>
       {
         jobs.length > 0 && 
-        selectedJobIds.length > 0 &&
+        (selectedJobIds.length > 0 || applyText === 'Submitted') &&
         <ApplyDiv onClick={submitApplications}>
           <MyButton
             backgroundColor="#000000"
