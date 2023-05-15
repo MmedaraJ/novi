@@ -18,6 +18,7 @@ export const ScrollToTopDiv = styled.div`
     border: 1px solid #000000;
     border-radius: .5rem;
     width: 20px;
+    cursor: pointer;
     display: ${({ isVisible }) => (isVisible ? "block" : "none")};
 `;
 
@@ -29,4 +30,6 @@ export const ApplyDiv = styled.div`
     color: #FFFFFF;
     border: none;
     border-radius: .5rem;
+    width: fit-content;
+    cursor: pointer;
 `;

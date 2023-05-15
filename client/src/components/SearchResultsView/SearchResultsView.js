@@ -23,6 +23,7 @@ const SearchResultsView = (props) => {
                                 job={job._source? job._source: job}
                                 selectedOptions={props.selectedOptions}
                                 handleJobDivClick={props.handleJobDivClick}
+                                selectedJobIds={props.selectedJobIds}
                                 index={i}
                                 key={i}
                             />

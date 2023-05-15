@@ -23,6 +23,7 @@ import MyButton from '../../components/Buttons/MyButton';
 const Home = (props) => {
   const [isVisible, setIsVisible] = useState(false);
   const [dateSort, setDateSort] = useState(false);
+  const [applyText, setApplyText] = useState("Apply");
   const [jobs, setJobs] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [selectedOptions, setSelectedOptions] = useState(['Summary']);
@@ -272,8 +273,27 @@ const Home = (props) => {
         ? prev.filter((prevJob) => prevJob !== jobId)
         : [...prev, jobId]
     );
-    console.log(`Clicked Job Id: ${jobId}`);
+    setApplyText("Apply");
   };
+
+  const submitApplications = () => {
+    selectedJobIds.map((jobId, i) => {
+      axios.post(
+        'http://localhost:8000/api/application/create',
+        {
+          user_id: localStorage.getItem('userId').replace(/^"+|"+$/g, ''),
+          job_id: jobId
+        }
+      ).then(res => {
+        console.log(res);
+      }).catch(err => {
+        console.log(err);
+      });
+    });
+    
+    setSelectedJobIds([]);
+    setApplyText("Submitted");
+  }
 
   return (
     <div>
@@ -320,6 +340,7 @@ const Home = (props) => {
         jobs={jobs}
         selectedOptions={selectedOptions}
         handleJobDivClick={handleJobDivClick}
+        selectedJobIds={selectedJobIds}
       />
       <p onClick={st}>sdsdsdsds</p>
       <br></br>
@@ -396,14 +417,14 @@ const Home = (props) => {
         <FaArrowUp/>
       </ScrollToTopDiv>
       {
-        //use selectedJobs array here later
         jobs.length > 0 && 
-        <ApplyDiv>
+        selectedJobIds.length > 0 &&
+        <ApplyDiv onClick={submitApplications}>
           <MyButton
             backgroundColor="#000000"
             color="#FFFFFF"
-            text="Apply"
-            width="50px"
+            text={applyText}
+            width="max"
             height="30px"
           />
         </ApplyDiv>

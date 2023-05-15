@@ -25,7 +25,7 @@ import CurrencyConverter from '../CurrencyConverter/CurrencyConverter';
 import PopUpJobPost from '../PopUpJobPost/PopUpJobPost';
 
 const JobPost = (props) => {
-    const [isVisible, setVisible] = useState(false);
+    //const [isVisible, setVisible] = useState(false);
     const locale = navigator.language;
     const [isExpanded, setIsExpanded] = useState(false);
     const options = { month: "long", day: "numeric", year: "numeric" };
@@ -43,8 +43,8 @@ const JobPost = (props) => {
     }, [isExpanded]);
 
     const handleDivClick = () => {
-        setVisible(!isVisible);
         props.handleJobDivClick(props.job._id);
+        //setVisible(!isVisible);
     };
 
     const handleExpandClick = (event) => {
@@ -65,9 +65,11 @@ const JobPost = (props) => {
     return(
         <JobDiv 
             onClick={handleDivClick}
-            isVisible={isVisible}
+            isVisible={
+                props.selectedJobIds.includes(props.job._id)
+            }
         >
-            {isVisible && <CheckIcon />}
+            {props.selectedJobIds.includes(props.job._id) && <CheckIcon />}
             <TopLeftDiv onClick={handleExpandClick}>
                 <FaExpand/>
             </TopLeftDiv>

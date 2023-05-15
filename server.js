@@ -38,6 +38,7 @@ app.use(
 
 require('./server/routes/user.routes')(app);
 require('./server/routes/job.routes')(app);
+require('./server/routes/application.routes')(app);
 
 // Configure multer storage (you can also use multer's memoryStorage for in-memory storage)
 const storage = multer.diskStorage({
@@ -131,6 +132,25 @@ app.get('/api/download/:filename', (req, res) => {
     //         company_email: {type: 'text'},
     //         application_instruction: {type: 'text'},
     //         upgrade: {type: 'text'},
+    //       }
+    //     }
+    //   }
+    // }, (err, resp, status) => {
+    //   if (err) {
+    //     console.log(err);
+    //   }
+    //   else {
+    //     console.log("create", resp);
+    //   }
+    // });
+
+    // client.indices.create({ 
+    //   index: 'applications',
+    //   body: {
+    //     mappings: {
+    //       properties: {
+    //         user_id: { type: 'text' },
+    //         job_id: {type: 'text'},
     //       }
     //     }
     //   }

@@ -15,6 +15,7 @@ export const AButton = styled.button`
     
         &:hover {
           background-color: #9e9e9e;
+          cursor: pointer;
         }
     }
 `;
