@@ -87,7 +87,7 @@ const JobPost = (props) => {
                 <P>{
                     props.onFirstTab?
                     props.job.company_name:
-                    props.job.company.display_name
+                    props.job.company.display_name !== 'Unknown]' && props.job.company.display_name
                 }</P>
             </CompanyNameDiv>
             <LocationDiv>

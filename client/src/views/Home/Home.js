@@ -44,6 +44,7 @@ const Home = (props) => {
     job_type: "",
     salary_estimate: "",
     industry: "",
+    category: "",
     company: "",
     job_language: "",
   });
@@ -86,8 +87,10 @@ const Home = (props) => {
   useEffect(() => {
     if(state.keyword || state.location){
       setOurJobs([]);
+      setTheirJobs([]);
       setPageNumber(1);
       getJobsBasedOnSearch();
+      getThirdPartyJobsBasedOnSearch();
     }else{
       getAllJobs();
     }
@@ -149,7 +152,7 @@ const Home = (props) => {
   /**
    * Search for the next (PAGE_SIZE) jobs.
    */
-  const getJobsBasedOnSearch = () => {
+  async function getJobsBasedOnSearch() {
     setSelectedJobIds([]);
     setApplyText("");
     axios.get('http://localhost:8000/api/jobs/search', {
@@ -158,7 +161,7 @@ const Home = (props) => {
         location: state.location,
         location_type: optionStates.location_type,
         job_type: optionStates.job_type,
-        category: optionStates.category,
+        category: optionStates.industry,
         job_language: optionStates.job_language,
         salary_estimate: optionStates.salary_estimate,
         date_posted: optionStates.date_posted,
@@ -172,12 +175,49 @@ const Home = (props) => {
       });
   }
 
-  const onSubmitHandler = (e) => {
+  /**
+   * Search for the next (PAGE_SIZE) third party jobs.
+   */
+  async function getThirdPartyJobsBasedOnSearch() {
+    let params = {}
+
+    if (state.keyword || optionStates.category){
+      params["what_or"] = `${state.keyword}${optionStates.category ? " " + optionStates.category : ""}`
+    }
+    if (state.location){
+      //params["location1"] = state.location
+      params["where"] = state.location
+    }
+    if (optionStates.job_type === "Full-time"){
+      params["full_time"] = 1
+    } else if (optionStates.job_type === "Part-time"){
+      params["part_time"] = 1
+    } else if (optionStates.job_type === "Contract"){
+      params["contract"] = 1
+    }
+
+    axios.get(
+      `https://api.adzuna.com/v1/api/jobs/ca/search/1?app_id=${adzunaAppId}&app_key=${adzunaApiKey}&results_per_page=1000`, 
+      {
+        params: params
+      }).then(response => {
+        console.log(response.data);
+        setTheirJobs(prevJobs => [...prevJobs, ...response.data.results]);
+      }).catch(err => {
+        console.log(err);
+      });
+  }
+
+  async function onSubmitHandler(e) {
     e.preventDefault();
     if(state.keyword || state.location){
       setOurJobs([]);
+      setTheirJobs([]);
       setPageNumber(1);
-      getJobsBasedOnSearch();
+      await Promise.all([
+        getJobsBasedOnSearch(),
+        getThirdPartyJobsBasedOnSearch()
+      ])
     }else{
       getAllJobs();
     }
@@ -353,12 +393,23 @@ const Home = (props) => {
   return (
     <div style={{backgroundColor: `${COLORS.BACK}`}}>
       <NavBar/>
-      <SearchBar
-        handleFilterChange={handleFilterChange}
-        onSubmitHandler={onSubmitHandler}
-        onInputChanged={onInputChanged}
-        state={state}
-      />
+      {
+        onFirstTab ?
+        <SearchBar
+          handleFilterChange={handleFilterChange}
+          onSubmitHandler={onSubmitHandler}
+          onInputChanged={onInputChanged}
+          state={state}
+          onFirstTab={true}
+        /> :
+        <SearchBar
+          handleFilterChange={handleFilterChange}
+          onSubmitHandler={onSubmitHandler}
+          onInputChanged={onInputChanged}
+          state={state}
+          onFirstTab={false}
+        />
+      }
       <TabDiv>
         <OurJobsDiv 
           onClick={handleOurJobsDivClick}
@@ -383,6 +434,7 @@ const Home = (props) => {
         />
       }
       {
+        onFirstTab &&
         ourJobs.length > 0 && ourJobs[0]._source && 
         <div>
           <SP>

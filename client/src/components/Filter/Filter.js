@@ -14,6 +14,8 @@ const Filter = (props) => {
 
   const handleSelectChange = (event) => {
     setSelectedOption(event.target.value);
+    console.log(props.name);
+    console.log(event.target.value);
     props.onFilterChange(props.name, event.target.value);
   }
 
@@ -32,7 +34,11 @@ const Filter = (props) => {
         {!selectedOption && <Option value="">{props.title}</Option>}
         {
           props.options && props.options.map((option, i) => {
-            return (<Option key={i} value={option.value}>{option.text}</Option>);
+            return (
+              props.onSecondTab ?
+              <Option key={i} value={option.tag}>{option.label}</Option> :
+              <Option key={i} value={option.value}>{option.text}</Option>
+            );
           })
         }
       </MainSelect>
