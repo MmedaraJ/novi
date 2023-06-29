@@ -93,7 +93,6 @@ const SignIn = (props) => {
                 phoneNumberVerified: false,
                 password: 'password',
                 confirmPassword: 'password',
-                resumeName: getRandomLetters(1),
                 googleSignInId: prof.id
             },
             { withCredentials: true },

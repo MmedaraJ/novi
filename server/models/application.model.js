@@ -21,26 +21,26 @@ const ApplicationSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-ApplicationSchema.post('save', function() {
-    const application = this.toObject();
-    application.doc_id = application._id.toString();
-    delete application._id;
+// ApplicationSchema.post('save', function() {
+//     const application = this.toObject();
+//     application.doc_id = application._id.toString();
+//     delete application._id;
 
-    client.index({
-      index: 'applications',
-      body: application,
-    }, (err) => {
-      if (err) console.log(err);
-    });
-});
+//     client.index({
+//       index: 'applications',
+//       body: application,
+//     }, (err) => {
+//       if (err) console.log(err);
+//     });
+// });
   
-ApplicationSchema.post('remove', function(doc) {
-    client.delete({
-        index: 'applications',
-        id: doc._id.toString(),
-    }, (err) => {
-        if (err) console.log(err);
-    });
-});
+// ApplicationSchema.post('remove', function(doc) {
+//     client.delete({
+//         index: 'applications',
+//         id: doc._id.toString(),
+//     }, (err) => {
+//         if (err) console.log(err);
+//     });
+// });
   
 module.exports.Application = mongoose.model('Application', ApplicationSchema);

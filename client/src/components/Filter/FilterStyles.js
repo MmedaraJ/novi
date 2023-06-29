@@ -1,13 +1,14 @@
 import styled from "styled-components";
+import { COLORS } from "../../constants/colors";
 
 export const MainSelect = styled.select`
-    background-color: #FFFFFF;
+    background-color: ${({selectedOption}) => (selectedOption? `${COLORS.LIGHT_ORANGE}`:  `${COLORS.BACK}`)};
     padding: ${({selectedOption}) => (selectedOption? '8px': '10px')};
     padding-left: 10px
     padding-right: 20px;
     height: 40px;
     border-radius: .5rem;
-    border: black solid ${({selectedOption}) => (selectedOption? '3px': '1px')};
+    border: 1px solid ${({selectedOption}) => (selectedOption? `${COLORS.ORANGE}`: 'black')};
     margin-right: 7px;
     margin-bottom: 6px;
     color: black;

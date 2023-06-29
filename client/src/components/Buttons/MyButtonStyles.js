@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { COLORS } from "../../constants/colors";
 
 export const AButton = styled.button`
     background-color: ${props => props.backgroundColor};
@@ -8,14 +9,16 @@ export const AButton = styled.button`
     padding: 5px;
     border: none;
     border-radius: .5rem;
+    cursor: pointer;
 
     &:disabled {
-        background-color: #9e9e9e;
+        background-color: ${COLORS.LIGHT_ORANGE};
         cursor: not-allowed;
+        color: black;
     
-        &:hover {
-          background-color: #9e9e9e;
-          cursor: pointer;
-        }
+        // &:hover {
+        //   background-color: ${COLORS.LIGHT_ORANGE};
+        //   cursor: pointer;
+        // }
     }
 `;

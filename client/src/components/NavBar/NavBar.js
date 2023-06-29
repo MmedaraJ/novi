@@ -11,14 +11,16 @@ import {
   useLocation
 } from "react-router-dom";
 import { 
+    BlogDiv,
     DropdownButton,
     DropdownContainer,
     DropdownContent,
     DropdownItem,
-    EmployerDiv, H1, Hamburger, ItemsDiv, LogoDiv, MainDiv, Menu, MenuItem, 
-    P, SignInDiv, VolunteerDiv
+    EmployerDiv, H1, Hamburger, ItemsDiv, JobsDiv, LeftDiv, LogoDiv, MainDiv, Menu, MenuItem, 
+    P, PP, ProfileIconDiv, SignInDiv, VolunteerDiv
 } from './NavBarStyles';
 import { FaBars, FaUser } from 'react-icons/fa';
+import { COLORS } from '../../constants/colors';
 
 const NavBar = (props) => {
     const [showMenu, setShowMenu] = useState(false);
@@ -26,9 +28,12 @@ const NavBar = (props) => {
     const location = useLocation();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
+    const [activeDiv, setActiveDiv] = useState(null);
     let loggedOut = false;
     const dropdownRef = useRef(null); 
     const menuRef = useRef(null);  
+    const [jobColor, setJobColor] = useState('black');
+    const [blogColor, setBlogColor] = useState('black');
 
     useEffect(() => {
         if (localStorage.getItem('userId')) {
@@ -49,6 +54,22 @@ const NavBar = (props) => {
           document.removeEventListener('mousedown', handleClickOutsideForMenu);
         };
     }, []);
+
+    const handleJobClick = () => {
+        setJobColor(`${COLORS.ORANGE}`);
+    };
+
+    const handleBlogClick = () => {
+        setBlogColor(`${COLORS.ORANGE}`);
+    };
+
+    const handleJobBlur = () => {
+        setJobColor("black");
+    };
+
+    const handleBlogBlur = () => {
+        setBlogColor("black");
+    };
 
     const toggleMenu = () => {
         setShowMenu(!showMenu);
@@ -102,62 +123,98 @@ const NavBar = (props) => {
         })
     }
 
-    const navToProfile = () => {
+    const navToProfile = (index) => {
+        setActiveDiv(prevIndex => index);
         navigate('/profile');
     }
 
-    const navToSignIn = () => {
+    const navToSignIn = (index) => {
+        setActiveDiv(prevIndex => index);
         navigate('/signin');
     }
 
-    const navToSignUp = () => {
+    const navToSignUp = (index) => {
+        setActiveDiv(prevIndex => index);
         navigate('/signup');
     }
 
-    const navToHome = () => {
+    const navToBlog = (index) => {
+        setActiveDiv(prevIndex => index);
+        navigate('/blog');
+    }
+
+    const navToHome = (index) => {
+        setActiveDiv(prevIndex => index);
         navigate('/');
     }
 
   return (
-    <MainDiv style={{backgroundColor: "#FFFFFF"}}>
+    <MainDiv>
         <LogoDiv onClick={navToHome}>
             <H1>LOGO</H1>
         </LogoDiv>
         <ItemsDiv>
-            <VolunteerDiv onClick={navToHome}><P>Find jobs</P></VolunteerDiv>
+            <VolunteerDiv>
+                <JobsDiv 
+                    onClick={() => {
+                        navToHome(0);
+                        handleJobClick();
+                    }}
+                    tabIndex="0"
+                    onBlur={handleJobBlur} 
+                    color={jobColor}
+                >
+                    <P>JOBS</P>
+                </JobsDiv>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <BlogDiv 
+                    onClick={() => {
+                        navToBlog(1);
+                        handleBlogClick();
+                    }}
+                    tabIndex="0"
+                    onBlur={handleBlogBlur}
+                    color={blogColor}
+                >
+                    <P>BLOG</P>
+                </BlogDiv>
+            </VolunteerDiv>
             {
                 !isLoggedIn ?
                     location.pathname=="/signin"?
-                    (<SignInDiv onClick={navToSignUp}><P>Sign Up</P></SignInDiv>):
-                    (<SignInDiv onClick={navToSignIn}><P>Sign In</P></SignInDiv>):
+                    (<SignInDiv onClick={navToSignUp}><P>SIGN UP</P></SignInDiv>):
+                    (<SignInDiv onClick={navToSignIn}><P>SIGN IN</P></SignInDiv>):
                 (
                     <DropdownContainer ref={dropdownRef}>
-                        <div onClick={toggleDropdown}><FaUser/></div>
+                        <ProfileIconDiv onClick={toggleDropdown}>
+                            <FaUser/>
+                        </ProfileIconDiv>
                         <DropdownContent show={showDropdown}>
-                            <DropdownItem onClick={navToProfile}><P>Profile</P></DropdownItem>
-                            <DropdownItem onClick={logUserOut}><P>Sign Out</P></DropdownItem>
+                            <DropdownItem onClick={navToProfile}><PP>PROFILE</PP></DropdownItem>
+                            <DropdownItem onClick={logUserOut}><PP>SIGN OUT</PP></DropdownItem>
                         </DropdownContent>
                     </DropdownContainer>
                 )
             }
         </ItemsDiv>
         <EmployerDiv>
-            <P>Employers / Post Job</P>
+            <P>EMPLOYER</P>
         </EmployerDiv>
         <Hamburger onClick={toggleMenu}>
             <FaBars/>
         </Hamburger>
         <Menu style={{ display: showMenu ? 'flex' : 'none' }} ref={menuRef}>
-            <MenuItem onClick={navToHome}><P>Find jobs</P></MenuItem>
-            <MenuItem><P>Employers / Post Job</P></MenuItem>
+            <MenuItem onClick={navToHome}><PP>JOBS</PP></MenuItem>
+            <MenuItem onClick={navToBlog}><PP>BLOG</PP></MenuItem>
             {
                 !isLoggedIn?
                 location.pathname=="/signin"?
-                (<MenuItem onClick={navToSignUp}><P>Sign Up</P></MenuItem>):
-                (<MenuItem onClick={navToSignIn}><P>Sign In</P></MenuItem>):
-                (<MenuItem onClick={navToProfile}><P>Profile</P></MenuItem>)
+                (<MenuItem onClick={navToSignUp}><PP>SIGN UP</PP></MenuItem>):
+                (<MenuItem onClick={navToSignIn}><PP>SIGN IN</PP></MenuItem>):
+                (<MenuItem onClick={navToProfile}><PP>PROFILE</PP></MenuItem>)
             }
-            {isLoggedIn && <MenuItem onClick={logUserOut}><P>Sign Out</P></MenuItem>}
+            <MenuItem><PP>EMPLOYER</PP></MenuItem>
+            {isLoggedIn && <MenuItem onClick={logUserOut}><PP>SIGN OUT</PP></MenuItem>}
         </Menu>
     </MainDiv>
   )

@@ -6,18 +6,18 @@ import {
   Link,
   Outlet, 
   useRoutes,
-  useNavigate
+  useNavigate,
+  useLocation
 } from "react-router-dom";
 import { 
-    BlankDiv,
-    ButtonDiv,
-    Error, FileInput, FirstNameDiv, GoogleButtonDiv, InputDiv, LabelDiv, LastNameDiv, 
-    LastNameDivWithButtons, 
-    MainDiv, MainSelect, MyPhoneInput, NamesDiv, Option, P, RandTextDiv, ResumeLabel, ResumeNameText, ResumeText, SearchButtonDiv, 
-    SelectedFile, Success, TextInput, UploadButton 
+    BlankDiv, ButtonDiv, Error, FileInput, FirstNameDiv, GoogleButtonDiv, 
+    InputDiv, LabelDiv, LastNameDiv, LastNameDivWithButtons, MainDiv, 
+    MainSelect, MyPhoneInput, NamesDiv, Option, P, RP, RandTextDiv, ResumeLabel, 
+    ResumeNameText, ResumeText, SearchButtonDiv, SelectedFile, Success, TextInput, UploadButton 
 } from './ProfileStyles';
 import NavBar from '../../components/NavBar/NavBar';
 import MyButton from '../../components/Buttons/MyButton';
+import { COLORS } from "../../constants/colors";
 
 const Profile = (props) => {
     const [state, setState] = useState({
@@ -49,9 +49,24 @@ const Profile = (props) => {
         general: "",
         phoneNumberVerification: ""
     });
+    const [borderColors, setBorderColors] = useState({
+        firstName: "black",
+        lastName: "black",
+        email: "black",
+        password: "black",
+        confirmPassword: "black",
+        oldPassword: "black",
+        newPassword: "black",
+        confirmNewPassword: "black",
+        phoneNumber: "black",
+        phoneNumberVerificationCode: "black",
+        resumeName: "black",
+    });
     const [selectedFileName, setSelectedFileName] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
     const navigate = useNavigate();
+    const location = useLocation();
+    const [message, setMessage] = useState(null);   
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const [confirmationCodeSent, setConfirmationCodeSent] = useState(false);
     const [isSaveButtonDisabled, setIsSaveButtonDisabled] = useState(true);
@@ -63,6 +78,10 @@ const Profile = (props) => {
       const handleResize = () => setWindowWidth(window.innerWidth);
       window.addEventListener('resize', handleResize);
       return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    useEffect(() => {
+      setMessage(location.state? location.state.message: null);
     }, []);
 
     useEffect(() => {
@@ -99,7 +118,7 @@ const Profile = (props) => {
     }, []);
 
     useEffect(() => {
-        if(state.resumeName.length > 0){
+        if(state.resumeName){
             axios.get(`http://localhost:8000/api/download/${state.resumeName}`)
                 .then(res => {
                     console.log(res);
@@ -497,6 +516,12 @@ const Profile = (props) => {
             <br></br>
             <br></br>
             <MainDiv>
+                {
+                    message &&
+                    <RandTextDiv>
+                        <RP>{message}</RP>
+                    </RandTextDiv>
+                }
                 <RandTextDiv>
                     <P>Hi <b>{
                         loggedInUser?
@@ -508,7 +533,7 @@ const Profile = (props) => {
                     <NamesDiv>
                         <FirstNameDiv>
                             <InputDiv
-                                borderColor={errors.firstName? 'red': '#000000'}
+                                borderColor={errors.firstName? 'red': `${borderColors.firstName}`}
                             >
                                 <TextInput
                                     required
@@ -659,7 +684,7 @@ const Profile = (props) => {
                         <LastNameDivWithButtons>
                             <SearchButtonDiv>
                                 <MyButton
-                                    backgroundColor="#000000"
+                                    backgroundColor={`${COLORS.ORANGE}`}
                                     color="#FFFFFF"
                                     text="Send Verification Code"
                                     width="100%"
@@ -698,7 +723,7 @@ const Profile = (props) => {
                         <LastNameDivWithButtons>
                             <SearchButtonDiv>
                                 <MyButton
-                                    backgroundColor="#000000"
+                                    backgroundColor={`${COLORS.ORANGE}`}
                                     color="#FFFFFF"
                                     text="Verify"
                                     width="100%"
@@ -752,7 +777,7 @@ const Profile = (props) => {
                                     fileSrc &&
                                     <a href={fileSrc} download>
                                         <MyButton
-                                            backgroundColor="#000000"
+                                            backgroundColor={`${COLORS.ORANGE}`}
                                             color="#FFFFFF"
                                             text="Download Resume"
                                             width="100%"
@@ -769,7 +794,7 @@ const Profile = (props) => {
                     <ButtonDiv>
                         <GoogleButtonDiv>
                             <MyButton
-                                backgroundColor="#000000"
+                                backgroundColor={`${COLORS.ORANGE}`}
                                 color="#FFFFFF"
                                 text="Save"
                                 width="100%"

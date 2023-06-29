@@ -9,20 +9,33 @@ import {
 import { 
     FilterDiv, IconDiv, InputDiv, MainDiv, P, 
     SearchButtonDiv, TextInput, LocationIconDiv,
-    TitleInputDiv, LocationInputDiv 
+    TitleInputDiv, LocationInputDiv, MiniSearchDiv, BFilterDiv 
 } from './SearchBarStyles';
 import MyButton from '../Buttons/MyButton';
 import Filter from '../Filter/Filter';
-import { FaSearch, FaLocationArrow } from 'react-icons/fa';
-import { MdPlace } from 'react-icons/md';
+import { FaSearch, FaRegKeyboard } from 'react-icons/fa';
+import { 
+    MdPlace, MdKeyboardReturn
+ } from 'react-icons/md';
 import { JobCategoriesMapList } from '../../JobCategoriesData';
+import { COLORS } from '../../constants/colors';
 
 const SearchBar = (props) => {
+    const [color, setColor] = useState('black');
+
+    const handleFocus = () => {
+        setColor(`${COLORS.ORANGE}`);
+    }
+
+    const handleBlur = () => {
+        setColor('black');
+    }
+
   return (
-    <div style={{backgroundColor: "#FFFFFF"}}>
+    <div style={{backgroundColor: `${COLORS.BACK}`}}>
         <form onSubmit={props.onSubmitHandler}>
             <MainDiv>
-                <InputDiv>
+                <InputDiv color={color}>
                     <TitleInputDiv>
                         <IconDiv><FaSearch/></IconDiv>
                         <TextInput
@@ -31,22 +44,34 @@ const SearchBar = (props) => {
                             placeholder='Keywords'
                             value={props.state.keyword}
                             onChange={props.onInputChanged}
+                            tabIndex="0"
+                            onClick={handleFocus} 
+                            onBlur={handleBlur}        
                         />
                     </TitleInputDiv>
-                    <LocationInputDiv>
-                        <LocationIconDiv><MdPlace/></LocationIconDiv>
+                    <LocationInputDiv color={color}>
+                        <LocationIconDiv color={color}><MdPlace/></LocationIconDiv>
                         <TextInput
                             name='location'
                             type='text'
                             placeholder='Location'
                             value={props.state.location}
                             onChange={props.onInputChanged}
+                            tabIndex="0"
+                            onClick={handleFocus} 
+                            onBlur={handleBlur}        
                         />
+                        {/* <MiniSearchDiv onClick={props.onSubmitHandler}>
+                            <MdKeyboardReturn 
+                                color="#FFFFFF"
+                                size="16px"
+                            />
+                        </MiniSearchDiv> */}
                     </LocationInputDiv>
                 </InputDiv>
                 <SearchButtonDiv>
                     <MyButton
-                        backgroundColor="#000000"
+                        backgroundColor={`${COLORS.ORANGE}`}
                         color="#FFFFFF"
                         text="Search"
                         width="100%"
@@ -204,9 +229,9 @@ const SearchBar = (props) => {
                         ]}
                     />
                 </FilterDiv>:
-                <FilterDiv>
+                <BFilterDiv>
                     <P>Find your next job</P>
-                </FilterDiv>
+                </BFilterDiv>
             }
         </form>
     </div>

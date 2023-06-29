@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { COLORS } from "../../constants/colors";
 
 export const H1 = styled.h1`
     color: black;
@@ -12,6 +13,7 @@ export const MainDiv = styled.div`
     justify-content: center;
     align-items: center;
     height: 70px;
+    background-color: ${COLORS.BACK};
 
     @media screen and (max-width: 768px) {
       border: none;
@@ -53,18 +55,43 @@ export const EmployerDiv = styled.div`
     }
 `;
 
+export const JobsDiv = styled.div`
+    display: inline-block;  
+    width: fit-content;
+    cursor: pointer;
+    color: ${props => props.color};
+  
+    &:hover{
+      color: ${COLORS.ORANGE};
+    }
+`;
+
+export const BlogDiv = styled.div`
+    display: inline-block;  
+    width: fit-content;
+    cursor: pointer;
+    color: ${props => props.color};
+  
+    &:hover{
+      color: ${COLORS.ORANGE};
+    }
+`;
+
+export const ProfileIconDiv = styled.div`
+  color: black;
+
+  &:hover{
+    color: ${COLORS.ORANGE};
+  }
+
+  &:active{
+    color: ${COLORS.ORANGE};
+  }
+`;
+
 export const VolunteerDiv = styled.div`
     order: 0;
     height: max;
-    cursor: pointer;
-
-    &:hover{
-      font-weight: bold;
-    }
-
-    &:active{
-      font-weight: bold;
-    }
 `;
 
 export const SignInDiv = styled.div`
@@ -81,9 +108,32 @@ export const SignInDiv = styled.div`
     }
 `;
 
-export const P = styled.p`
+export const P = styled.h4`
   text-align: center;
-  font-size: small;
+  //font-size: small;
+  margin: 0px;
+
+  &:hover{
+    color: ${COLORS.ORANGE};
+  }
+
+  &:active{
+    color: ${COLORS.ORANGE};
+  }
+`;
+
+export const PP = styled.h4`
+  text-align: center;
+  //font-size: small;
+  color: black;
+
+  &:hover{
+    color: ${COLORS.ORANGE};
+  }
+
+  &:active{
+    color: ${COLORS.ORANGE};
+  }
 `;
 
 export const Menu = styled.div`
@@ -95,7 +145,7 @@ export const Menu = styled.div`
   top: 50px;
   right: 0;
   z-index: 1;
-  background-color: white;
+  background-color: ${COLORS.BACK};
   width: 150px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease-in-out;
@@ -118,7 +168,7 @@ export const MenuItem = styled.div`
   }
 
   &:hover {
-    background-color: #ddd;
+    background-color: ${COLORS.LIGHT_ORANGE};
   }
 `;
 
@@ -151,7 +201,7 @@ export const DropdownButton = styled.button`
 export const DropdownContent = styled.div`
   display: ${(props) => (props.show ? 'block' : 'none')};
   position: absolute;
-  background-color: #ffffff;
+  background-color: ${COLORS.BACK};
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
@@ -165,6 +215,6 @@ export const DropdownItem = styled.div`
   display: block;
 
   &:hover {
-    background-color: #ddd;
+    background-color: ${COLORS.LIGHT_ORANGE};
   }
 `;

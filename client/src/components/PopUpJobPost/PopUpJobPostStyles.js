@@ -1,17 +1,19 @@
 import styled from 'styled-components';
+import { COLORS } from "../../constants/colors";
 
 export const MainDiv = styled.div`
     position: relative;
     background-color: white;
     padding: 1rem;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    border: black solid 1px;
+    border-radius: .5rem;
+    border: ${COLORS.ORANGE} solid 1px;
     break-inside: avoid;
     width: 80vw;
     text-align: left;
     max-height: 80vh;
     overflow-y: auto;
+    cursor: auto;
 `;
 
 export const TitleDiv = styled.div`
@@ -52,6 +54,12 @@ export const SP = styled.p`
   font-size: small;
   color: black;
   margin: 0px;
+`;
+
+export const ApplyDiv = styled.div`
+  margin-top: 24px;
+  cursor: pointer;
+  width: fit-content;
 `;
 
 export const JobDescDiv = styled.div`

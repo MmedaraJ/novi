@@ -1,11 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { 
     BP,
+    Container,
     DropdownContainer, DropdownHeader, DropdownListContainer,
     DropdownListItem,
-    P
+    P,
+    SP,
+    StickyContainer
 } from './SummaryFilterStyles';
-import { IoIosOptions } from 'react-icons/io';
+import { 
+  IoIosOptions, IoMdArrowBack
+} from 'react-icons/io';
+import { COLORS } from '../../constants/colors';
+
 
 const SummaryFilter = (props) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -20,6 +27,23 @@ const SummaryFilter = (props) => {
         'Schedule'
     ];
     const dropdownRef = useRef(null); 
+    const [color, setColor] = useState('black');
+
+    const handleFocus = () => {
+        setColor(`${COLORS.ORANGE}`);
+    }
+
+    const handleBlur = () => {
+      if(props.selectedOptions.length > 0){
+        if(props.selectedOptions.length == 1 && props.selectedOptions.includes("Summary")){
+          setColor('black');
+        }else{
+          setColor(`${COLORS.ORANGE}`);
+        }
+      }else{
+        setColor('black');
+      }
+    }
 
     const handleClickOutside = (event) => {
         if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -35,28 +59,39 @@ const SummaryFilter = (props) => {
     }, []);
   
     return (
-      <DropdownContainer ref={dropdownRef}>
-        <DropdownHeader onClick={() => setIsOpen(!isOpen)}>
-            <IoIosOptions/>
-        </DropdownHeader>
-        {isOpen && (
-          <DropdownListContainer>
-            {options.map((option, index) => (
-              <DropdownListItem
-                key={index}
-                onClick={() => props.handleSelect(option)}
-                style={{
-                  backgroundColor: props.selectedOptions.includes(option)
-                    ? '#ddd'
-                    : '',
-                }}
-              >
-                <BP>{option}</BP>
-              </DropdownListItem>
-            ))}
-          </DropdownListContainer>
-        )}
-      </DropdownContainer>
+      <Container 
+        ref={dropdownRef} 
+        onClick={() => {
+          setIsOpen(!isOpen);
+          handleFocus();
+        }}
+        tabIndex="0"
+        onBlur={handleBlur} 
+      >
+        <DropdownContainer>
+          <DropdownHeader color={color}>
+              <IoIosOptions/>
+          </DropdownHeader>
+          {isOpen && (
+            <DropdownListContainer>
+              {options.map((option, index) => (
+                <DropdownListItem
+                  key={index}
+                  onClick={() => props.handleSelect(option)}
+                  style={{
+                    backgroundColor: props.selectedOptions.includes(option)
+                      ? `${COLORS.LIGHT_ORANGE}`
+                      : '',
+                  }}
+                >
+                  <BP>{option}</BP>
+                </DropdownListItem>
+              ))}
+            </DropdownListContainer>
+          )}
+        </DropdownContainer>
+        <SP><b>&nbsp;<IoMdArrowBack/> Filter job card details</b></SP>
+      </Container>
     );
   };
   

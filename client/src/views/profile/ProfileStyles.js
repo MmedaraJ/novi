@@ -1,6 +1,7 @@
 import styled from "styled-components";
-import 'react-phone-number-input/style.css'
-import PhoneInput from 'react-phone-number-input'
+import 'react-phone-number-input/style.css';
+import PhoneInput from 'react-phone-number-input';
+import { COLORS } from "../../constants/colors";
 
 export const MainDiv = styled.div`
     background-color: #FFFFFF;
@@ -138,6 +139,11 @@ export const LabelDiv = styled.div`
 export const P = styled.p`
   font-size: small;
   color: #000000;
+`;
+
+export const RP = styled.p`
+  font-size: small;
+  color: red;
 `;
 
 export const Error = styled.p`

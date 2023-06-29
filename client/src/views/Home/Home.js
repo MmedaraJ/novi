@@ -9,7 +9,7 @@ import {
 } from "react-router-dom";
 import { 
   ApplyDiv,
-  H1, P, RandDiv, ScrollToTopDiv
+  H1, OurJobsDiv, P, RandDiv, SP, ScrollToTopDiv, TabDiv, TheirJobsDiv
 } from './HomeStyles';
 import { FaArrowUp } from 'react-icons/fa';
 import { MdSort } from "react-icons/md";
@@ -19,15 +19,19 @@ import RichTextEditor from '../RichTextEditor';
 import SearchResultsView from '../../components/SearchResultsView/SearchResultsView';
 import SummaryFilter from '../../components/SummaryFilter/SummaryFilter';
 import MyButton from '../../components/Buttons/MyButton';
+import { COLORS } from '../../constants/colors';
 
 const Home = (props) => {
   const [isVisible, setIsVisible] = useState(false);
   const [dateSort, setDateSort] = useState(false);
   const [applyText, setApplyText] = useState("Apply");
-  const [jobs, setJobs] = useState([]);
+  const [ourJobs, setOurJobs] = useState([]);
+  const [theirJobs, setTheirJobs] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [selectedOptions, setSelectedOptions] = useState(['Summary']);
   const [selectedJobIds, setSelectedJobIds] = useState([]);
+  const [loggedInUser, setLoggedInUser] = useState(null);
+  const [onFirstTab, setOnFirstTab] = useState(true);
   const navigate = useNavigate();
   const PAGE_SIZE = 50;
   const [state, setState] = useState({
@@ -43,6 +47,24 @@ const Home = (props) => {
     company: "",
     job_language: "",
   });
+  const adzunaApiKey = process.env.REACT_APP_ADZUNA_API_KEY;
+  const adzunaAppId = process.env.REACT_APP_ADZUNA_APP_ID;
+
+  useEffect(() => {
+    if(localStorage.getItem('userId')){
+        axios.post(
+            'http://localhost:8000/api/user/get',
+            {
+                userId: localStorage.getItem('userId').replace(/^"+|"+$/g, '')
+            },
+            {withCredentials: true}
+        ).then(res => {
+            setLoggedInUser(res.data.user);
+        }).catch(err => {
+            console.log(err);
+        });
+    }
+  }, []);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -54,12 +76,16 @@ const Home = (props) => {
   }, []);
 
   useEffect(() => {
-    console.log(`Clicked jobs: ${selectedJobIds}`);
+    getTheirJobs();
+  }, []);
+
+  useEffect(() => {
+    setApplyText(`Apply (${selectedJobIds.length})`);
   }, [selectedJobIds]);
 
   useEffect(() => {
     if(state.keyword || state.location){
-      setJobs([]);
+      setOurJobs([]);
       setPageNumber(1);
       getJobsBasedOnSearch();
     }else{
@@ -76,10 +102,22 @@ const Home = (props) => {
   }, [pageNumber]);
 
   const getAllJobs = () => {
+    setSelectedJobIds([]);
     axios.get('http://localhost:8000/api/jobs/getAll')
     .then(res => {
       console.log(res);
-      setJobs(res.data);
+      setOurJobs(res.data);
+    }).catch(err => {
+      console.log(err);
+    });
+  }
+
+  const getTheirJobs = () => {
+    axios.get(
+      `https://api.adzuna.com/v1/api/jobs/ca/search/1?app_id=${adzunaAppId}&app_key=${adzunaApiKey}&results_per_page=1000`
+    ).then(res => {
+      console.log(res);
+      setTheirJobs(res.data.results);
     }).catch(err => {
       console.log(err);
     });
@@ -112,6 +150,8 @@ const Home = (props) => {
    * Search for the next (PAGE_SIZE) jobs.
    */
   const getJobsBasedOnSearch = () => {
+    setSelectedJobIds([]);
+    setApplyText("");
     axios.get('http://localhost:8000/api/jobs/search', {
       params: {
         keyword: state.keyword,
@@ -126,7 +166,7 @@ const Home = (props) => {
         pageNumber: pageNumber
       }}).then(response => {
         console.log(response.data);
-        setJobs(prevJobs => [...prevJobs, ...response.data.jobs.hits.hits]);
+        setOurJobs(prevJobs => [...prevJobs, ...response.data.jobs.hits.hits]);
       }).catch(err => {
         console.log(err);
       });
@@ -135,7 +175,7 @@ const Home = (props) => {
   const onSubmitHandler = (e) => {
     e.preventDefault();
     if(state.keyword || state.location){
-      setJobs([]);
+      setOurJobs([]);
       setPageNumber(1);
       getJobsBasedOnSearch();
     }else{
@@ -248,14 +288,14 @@ const Home = (props) => {
   }
 
   const sortJobsByRelevance = () => {
-    const sortedJobs = [...jobs].sort((a, b) => b._score - a._score);
-    setJobs(sortedJobs);
+    const sortedJobs = [...ourJobs].sort((a, b) => b._score - a._score);
+    setOurJobs(sortedJobs);
     setDateSort(false);
   }
 
   const sortJobsByDate = () => {
-    const sortedJobs = [...jobs].sort((a, b) => new Date(b._source.createdAt) - new Date(a._source.createdAt) );
-    setJobs(sortedJobs);
+    const sortedJobs = [...ourJobs].sort((a, b) => new Date(b._source.createdAt) - new Date(a._source.createdAt) );
+    setOurJobs(sortedJobs);
     setDateSort(true);
   }
   
@@ -273,30 +313,45 @@ const Home = (props) => {
         ? prev.filter((prevJob) => prevJob !== jobId)
         : [...prev, jobId]
     );
-    setApplyText("Apply");
   };
 
-  const submitApplications = () => {
-    selectedJobIds.map((jobId, i) => {
-      axios.post(
-        'http://localhost:8000/api/application/create',
-        {
-          user_id: localStorage.getItem('userId').replace(/^"+|"+$/g, ''),
-          job_id: jobId
-        }
-      ).then(res => {
-        console.log(res);
-      }).catch(err => {
-        console.log(err);
-      });
-    });
+  const handleOurJobsDivClick = () => {
+    setOnFirstTab(true);
+  }
 
-    setSelectedJobIds([]);
-    setApplyText("Submitted");
+  const handleTheirJobsDivClick = () => {
+    setOnFirstTab(false);
+  }
+
+  const submitApplications = () => {
+    if(loggedInUser._id){
+      if(loggedInUser.resumeName){
+        selectedJobIds.map((jobId, i) => {
+          axios.post(
+            'http://localhost:8000/api/application/create',
+            {
+              user_id: localStorage.getItem('userId').replace(/^"+|"+$/g, ''),
+              job_id: jobId
+            }
+          ).then(res => {
+            console.log(res);
+            setSelectedJobIds([]);
+            setApplyText("Submitted");
+          }).catch(err => {
+            console.log(err);
+            setApplyText("Not Submitted");
+          });
+        });
+      }else{
+        navigate('/profile', {state: { message: "Upload resume"}});
+      }
+    }else{
+      navigate('/signin');
+    }
   }
 
   return (
-    <div>
+    <div style={{backgroundColor: `${COLORS.BACK}`}}>
       <NavBar/>
       <SearchBar
         handleFilterChange={handleFilterChange}
@@ -304,44 +359,76 @@ const Home = (props) => {
         onInputChanged={onInputChanged}
         state={state}
       />
+      <TabDiv>
+        <OurJobsDiv 
+          onClick={handleOurJobsDivClick}
+          onFirstTab={onFirstTab}
+        >
+          <SP>Our Jobs</SP>
+        </OurJobsDiv>
+        <TheirJobsDiv 
+          onClick={handleTheirJobsDivClick}
+          onFirstTab={onFirstTab}
+        >
+          <SP>Third Party Jobs</SP>
+        </TheirJobsDiv>
+      </TabDiv>
       <br></br>
       {
-        jobs.length > 0 && 
+        onFirstTab &&
+        ourJobs.length > 0 && 
         <SummaryFilter
           handleSelect={handleSelect}
           selectedOptions={selectedOptions}
         />
       }
       {
-        jobs.length > 0 && jobs[0]._source && 
+        ourJobs.length > 0 && ourJobs[0]._source && 
         <div>
-          <P>
+          <SP>
             <MdSort/>&nbsp;
             Sort&nbsp;by&nbsp;
-            <span onClick={sortJobsByRelevance} style={{cursor: "pointer"}}>
+            <span>
               {
                 dateSort?
-                <u>relevance</u>:
+                <u onClick={sortJobsByRelevance} style={{cursor: "pointer"}}>relevance</u>:
                 <b>relevance</b>
               }
             </span>
             &nbsp;or&nbsp;
-            <span onClick={sortJobsByDate} style={{cursor: "pointer"}}>
+            <span>
               {
                 dateSort?
                 <b>date</b>:
-                <u>date</u>
+                <u onClick={sortJobsByDate} style={{cursor: "pointer"}}>date</u>
               }
             </span>
-          </P>
+          </SP>
         </div>
       }
-      <SearchResultsView
-        jobs={jobs}
-        selectedOptions={selectedOptions}
-        handleJobDivClick={handleJobDivClick}
-        selectedJobIds={selectedJobIds}
-      />
+      {
+        onFirstTab &&
+        ourJobs.length > 0 &&
+        <SP>Click <b>one or many</b> job cards to select them. Click <b>apply</b> to submit your application.</SP>
+      }
+      {
+        onFirstTab?
+        <SearchResultsView
+          jobs={ourJobs}
+          onFirstTab={true}
+          selectedOptions={selectedOptions}
+          handleJobDivClick={handleJobDivClick}
+          selectedJobIds={selectedJobIds}
+          resumeName={loggedInUser? loggedInUser.resumeName: null}
+          userId={loggedInUser? loggedInUser._id: null}
+        />:
+        <SearchResultsView
+          jobs={theirJobs}
+          onFirstTab={false}
+          resumeName={loggedInUser? loggedInUser.resumeName: null}
+          userId={loggedInUser? loggedInUser._id: null}
+        />
+      }
       <p onClick={st}>sdsdsdsds</p>
       <br></br>
       <br></br>
@@ -417,11 +504,12 @@ const Home = (props) => {
         <FaArrowUp/>
       </ScrollToTopDiv>
       {
-        jobs.length > 0 && 
+        onFirstTab &&
+        ourJobs.length > 0 && 
         (selectedJobIds.length > 0 || applyText === 'Submitted') &&
         <ApplyDiv onClick={submitApplications}>
           <MyButton
-            backgroundColor="#000000"
+            backgroundColor={`${COLORS.ORANGE}`}
             color="#FFFFFF"
             text={applyText}
             width="max"

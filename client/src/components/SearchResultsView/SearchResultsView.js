@@ -19,11 +19,23 @@ const SearchResultsView = (props) => {
                 <GridContainer>
                     {
                         props.jobs.map((job, i) => (
+                            props.onFirstTab?
                             <JobPost
                                 job={job._source? job._source: job}
                                 selectedOptions={props.selectedOptions}
                                 handleJobDivClick={props.handleJobDivClick}
                                 selectedJobIds={props.selectedJobIds}
+                                onFirstTab={props.onFirstTab}
+                                resumeName={props.resumeName}
+                                userId={props.userId}
+                                index={i}
+                                key={i}
+                            />:
+                            <JobPost
+                                job={job}
+                                onFirstTab={props.onFirstTab}
+                                resumeName={props.resumeName}
+                                userId={props.userId}
                                 index={i}
                                 key={i}
                             />
