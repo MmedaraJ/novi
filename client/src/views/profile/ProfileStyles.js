@@ -4,7 +4,7 @@ import PhoneInput from 'react-phone-number-input';
 import { COLORS } from "../../constants/colors";
 
 export const MainDiv = styled.div`
-    background-color: #FFFFFF;
+    background-color: ${COLORS.BACK};
     height: max;
     width: max;
     padding: 2%;
@@ -64,6 +64,13 @@ export const MainDiv = styled.div`
     }
 `;
 
+export const Footer = styled.div`
+    background-color: ${COLORS.BACK};
+    height: 60px;
+    justify-content: center;
+    align-items: center;
+`;
+
 export const FirstNameDiv = styled.div`
     height: 60px;
     display: block;
@@ -120,6 +127,7 @@ export const TextInput = styled.input`
     border: none;
     flex: 1;
     width: 100%;
+    background-color: ${COLORS.BACK};
 
     &:focus {
         outline: none;
@@ -139,6 +147,13 @@ export const LabelDiv = styled.div`
 export const P = styled.p`
   font-size: small;
   color: #000000;
+`;
+
+export const UP = styled.p`
+  font-size: small;
+  color: #000000;
+  text-decoration: underline;
+  cursor: pointer;
 `;
 
 export const RP = styled.p`

@@ -13,12 +13,13 @@ import {
 } from "react-router-dom";
 import { 
     ButtonDiv,
-    Error, FileInput, FirstNameDiv, GoogleButtonDiv, InputDiv, LabelDiv, LastNameDiv, 
+    Error, FileInput, FirstNameDiv, Footer, GoogleButtonDiv, InputDiv, LabelDiv, LastNameDiv, 
     MainDiv, MainSelect, MyPhoneInput, NamesDiv, Option, P, RandTextDiv, ResumeLabel, ResumeNameText, ResumeText, SearchButtonDiv, 
-    SelectedFile, TextInput, UploadButton 
+    SelectedFile, TextInput, UP, UploadButton 
 } from './SignUpStyles';
 import NavBar from '../../components/NavBar/NavBar';
 import MyButton from '../../components/Buttons/MyButton';
+import { COLORS } from '../../constants/colors';
 
 const SignUp = (props) => {
     const [state, setState] = useState({
@@ -164,6 +165,10 @@ const SignUp = (props) => {
     const navToHome = () => {
         navigate('/');
     } 
+
+    const navToPrivacyPolicy = () => {
+      navigate("/privacypolicy");
+    }
 
     function handleFileUpload(event) {
         const file = event.target.files[0];
@@ -323,7 +328,7 @@ const SignUp = (props) => {
             <br></br>
             <MainDiv>
                 <RandTextDiv>
-                    <P>Create an account or <u onClick={navToSignIn}><b>sign in</b></u></P>
+                    <P>Create an account or <u onClick={navToSignIn}><b style={{cursor: "pointer"}}>sign in</b></u></P>
                 </RandTextDiv>
                 <RandTextDiv>
                     {errors.googleSignUp && <P style={{color: "red"}}>{errors.googleSignUp}</P>}
@@ -478,7 +483,7 @@ const SignUp = (props) => {
                     <ButtonDiv>
                         <GoogleButtonDiv>
                             <MyButton
-                                backgroundColor="#000000"
+                                backgroundColor={`${COLORS.ORANGE}`}
                                 color="#FFFFFF"
                                 text="Sign Up"
                                 width="100%"
@@ -504,6 +509,9 @@ const SignUp = (props) => {
                     </ButtonDiv>
                 </form>
             </MainDiv>
+            <Footer>
+                <UP onClick={navToPrivacyPolicy}>Privacy policy & Terms of use</UP>
+            </Footer>
         </div>
     )
 }

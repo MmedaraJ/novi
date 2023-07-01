@@ -41,31 +41,33 @@ const PopUpJobPost = (props) => {
     }
 
     const submitApplication = () => {
-        if(props.userId){
-            if(props.resumeName){
-                props.onFirstTab ?
-                (
-                    axios.post(
-                        'http://localhost:8000/api/application/create',
-                        {
-                            user_id: localStorage.getItem('userId').replace(/^"+|"+$/g, ''),
-                            job_id: props.job._id
-                        },
-                        {withCredentials: true}
-                    ).then(res => {
-                        console.log(res);
-                        setApplyText("Submitted");
-                    }).catch(err => {
-                        console.log(err);
-                        setApplyText("Not Submitted");
-                    })
-                ):
-                window.open(props.job.redirect_url, "_blank");
+        if (props.onFirstTab){
+            if(props.userId){
+                if(props.resumeName){
+                    (
+                        axios.post(
+                            'http://localhost:8000/api/application/create',
+                            {
+                                user_id: localStorage.getItem('userId').replace(/^"+|"+$/g, ''),
+                                job_id: props.job._id
+                            },
+                            {withCredentials: true}
+                        ).then(res => {
+                            console.log(res);
+                            setApplyText("Submitted");
+                        }).catch(err => {
+                            console.log(err);
+                            setApplyText("Not Submitted");
+                        })
+                    )
+                }else{
+                    navigate('/profile', {state: { message: "Upload resume"}});
+                }
             }else{
-                navigate('/profile', {state: { message: "Upload resume"}});
+                navigate('/signin');
             }
-        }else{
-            navigate('/signin');
+        } else {
+            window.open(props.job.redirect_url, "_blank");
         }
     }
 
@@ -204,8 +206,9 @@ const PopUpJobPost = (props) => {
                     <ItemsDiv>
                         <SP><FaBriefcase style={{color: "black"}}/>&nbsp;&nbsp;&nbsp;&nbsp;{
                             props.job.contract_time + (
-                                props.job.contract_type &&
-                                ", " + props.job.contract_type
+                                props.job.contract_type ?
+                                ", " + props.job.contract_type :
+                                ""
                             )
                         }</SP>
                     </ItemsDiv>

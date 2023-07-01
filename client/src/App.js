@@ -13,7 +13,7 @@ import SignIn from './views/SignIn/SignIn';
 import PhoneNumberVerification from './views/PhoneNumberVerification/PhoneNumberVerification';
 import Profile from './views/profile/Profile';
 import Blog from './views/Blog/Blog';
-import RadioButtonGroup from './views/Rad/Rad';
+import PrivacyPolicy from './views/PrivacyPolicy/PrivacyPolicy';
 
 function App() {
   const routes = useRoutes([
@@ -23,7 +23,7 @@ function App() {
     { path: '/phoneNumberVerification', element: (<div className='App'><PhoneNumberVerification/></div>) },
     { path: '/profile', element: (<div className='App'> <Profile/></div>) },
     { path: '/blog/*', element: (<div className='App'> <Blog/></div>) },
-    { path: '/rad', element: (<div className='App'> <RadioButtonGroup/></div>) },
+    { path: '/privacypolicy', element: (<div className='App'> <PrivacyPolicy/></div>) },
   ]);
 
   return routes;

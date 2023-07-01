@@ -172,7 +172,7 @@ const NavBar = (props) => {
                         navToBlog(1);
                         handleBlogClick();
                     }}
-                    tabIndex="0"
+                    tabIndex="1"
                     onBlur={handleBlogBlur}
                     color={blogColor}
                 >

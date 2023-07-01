@@ -10,10 +10,10 @@ import {
   useLocation
 } from "react-router-dom";
 import { 
-    BlankDiv, ButtonDiv, Error, FileInput, FirstNameDiv, GoogleButtonDiv, 
+    BlankDiv, ButtonDiv, Error, FileInput, FirstNameDiv, Footer, GoogleButtonDiv, 
     InputDiv, LabelDiv, LastNameDiv, LastNameDivWithButtons, MainDiv, 
     MainSelect, MyPhoneInput, NamesDiv, Option, P, RP, RandTextDiv, ResumeLabel, 
-    ResumeNameText, ResumeText, SearchButtonDiv, SelectedFile, Success, TextInput, UploadButton 
+    ResumeNameText, ResumeText, SearchButtonDiv, SelectedFile, Success, TextInput, UP, UploadButton 
 } from './ProfileStyles';
 import NavBar from '../../components/NavBar/NavBar';
 import MyButton from '../../components/Buttons/MyButton';
@@ -446,6 +446,10 @@ const Profile = (props) => {
         navigate('/');
     } 
 
+    const navToPrivacyPolicy = () => {
+      navigate("/privacypolicy");
+    }
+
     function handleFileUpload(event) {
         const file = event.target.files[0];
         setSelectedFile(file? file: null);
@@ -807,6 +811,9 @@ const Profile = (props) => {
                     {success.general && <Success>{success.general}</Success>}
                 </form>
             </MainDiv>
+            <Footer>
+        <UP onClick={navToPrivacyPolicy}>Privacy policy & Terms of use</UP>
+            </Footer>
         </div>
     )
 }

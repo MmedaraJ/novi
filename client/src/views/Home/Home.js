@@ -9,13 +9,13 @@ import {
 } from "react-router-dom";
 import { 
   ApplyDiv,
-  H1, OurJobsDiv, P, RandDiv, SP, ScrollToTopDiv, TabDiv, TheirJobsDiv
+  Footer,
+  H1, OurJobsDiv, P, RandDiv, SP, ScrollToTopDiv, TabDiv, TheirJobsDiv, UP
 } from './HomeStyles';
 import { FaArrowUp } from 'react-icons/fa';
 import { MdSort } from "react-icons/md";
 import NavBar from '../../components/NavBar/NavBar';
 import SearchBar from '../../components/SearchBar/SearchBar';
-import RichTextEditor from '../RichTextEditor';
 import SearchResultsView from '../../components/SearchResultsView/SearchResultsView';
 import SummaryFilter from '../../components/SummaryFilter/SummaryFilter';
 import MyButton from '../../components/Buttons/MyButton';
@@ -206,6 +206,10 @@ const Home = (props) => {
       }).catch(err => {
         console.log(err);
       });
+  }
+
+  const navToPrivacyPolicy = () => {
+    navigate("/privacypolicy");
   }
 
   async function onSubmitHandler(e) {
@@ -481,77 +485,9 @@ const Home = (props) => {
           userId={loggedInUser? loggedInUser._id: null}
         />
       }
-      <p onClick={st}>sdsdsdsds</p>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <p>sdsdsdsds</p>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <p>sdsdsdsds</p>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <p>sdsdsdsds</p>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <p>sdsdsdsds</p>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <p>sdsdsdsds</p>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <p>sdsdsdsds</p>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <p>sdsdsdsds</p>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <p>sdsdsdsds</p>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <p>sdsdsdsds</p>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <p>sdsdsdsds</p>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <p>sdsdsdsds</p>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <p>sdsdsdsds</p>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <p>sdsdsdsds</p>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <RichTextEditor/>
+      <Footer>
+        <UP onClick={navToPrivacyPolicy}>Privacy policy & Terms of use</UP>
+      </Footer>
       <ScrollToTopDiv isVisible={isVisible} onClick={handleScrollToTopClick}>
         <FaArrowUp/>
       </ScrollToTopDiv>

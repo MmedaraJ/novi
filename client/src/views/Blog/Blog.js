@@ -11,7 +11,7 @@ import {
     useParams,
     Navigate
 } from "react-router-dom";
-import { BlogListDiv, BlogText, MainDiv, P } from './BlogStyles';
+import { BlogListDiv, BlogText, Footer, MainDiv, P, UP } from './BlogStyles';
 import BlogList from '../../components/BlogList/BlogList';
 import NavBar from '../../components/NavBar/NavBar';
 import BlogPost from '../../components/BlogPost/BlogPost';
@@ -25,9 +25,14 @@ const Blog = (props) => {
         "Wow. What a job market!",
         "We are the champions",
     ]);
+    const navigate = useNavigate();
+
+    const navToPrivacyPolicy = () => {
+      navigate("/privacypolicy");
+    }
 
     return(
-        <div style={{backgroundColor: `${COLORS.BACK}`}}>
+        <div>
             <NavBar/>
             <br/>
             <br/>
@@ -49,6 +54,9 @@ const Blog = (props) => {
                     </Routes>
                 </BlogText>
             </MainDiv>
+            <Footer>
+        <UP onClick={navToPrivacyPolicy}>Privacy policy & Terms of use</UP>
+            </Footer>
         </div>
     )
 }

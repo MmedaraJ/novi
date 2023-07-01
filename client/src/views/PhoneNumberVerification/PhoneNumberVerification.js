@@ -12,10 +12,11 @@ import NavBar from '../../components/NavBar/NavBar';
 import { 
     ButtonDiv,
     Error,
-    FirstNameDiv, InputDiv, LabelDiv, LastNameDiv, MainDiv, NamesDiv, 
-    P, RandTextDiv, SearchButtonDiv, Success, TextInput
+    FirstNameDiv, Footer, InputDiv, LabelDiv, LastNameDiv, MainDiv, NamesDiv, 
+    P, RandTextDiv, SearchButtonDiv, Success, TextInput, UP
  } from './PhoneNumberVerificationStyles';
 import MyButton from '../../components/Buttons/MyButton';
+import { COLORS } from '../../constants/colors';
 
 const PhoneNumberVerification = (props) => {
     const [state, setState] = useState({
@@ -87,6 +88,10 @@ const PhoneNumberVerification = (props) => {
     const navToHome = () => {
         navigate('/');
     } 
+
+    const navToPrivacyPolicy = () => {
+      navigate("/privacypolicy");
+    }
 
     const navToProfile = () => {
         localStorage.removeItem('phoneNumber');
@@ -166,7 +171,7 @@ const PhoneNumberVerification = (props) => {
                         <LastNameDiv>
                             <SearchButtonDiv>
                                 <MyButton
-                                    backgroundColor="#000000"
+                                    backgroundColor={`${COLORS.ORANGE}`}
                                     color="#FFFFFF"
                                     text="Verify"
                                     width="100%"

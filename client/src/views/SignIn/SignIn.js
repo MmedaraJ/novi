@@ -16,10 +16,11 @@ import NavBar from '../../components/NavBar/NavBar';
 import { 
     ButtonDiv,
     Error,
-    FirstNameDiv, InputDiv, LabelDiv, LastNameDiv, MainDiv, NamesDiv, 
-    P, RandTextDiv, SearchButtonDiv, TextInput
+    FirstNameDiv, Footer, InputDiv, LabelDiv, LastNameDiv, MainDiv, NamesDiv, 
+    P, RandTextDiv, SearchButtonDiv, TextInput, UP
  } from './SignInStyles';
 import MyButton from '../../components/Buttons/MyButton';
+import { COLORS } from '../../constants/colors';
 
 const SignIn = (props) => {
     const [state, setState] = useState({
@@ -165,6 +166,10 @@ const SignIn = (props) => {
         navigate('/');
     } 
 
+    const navToPrivacyPolicy = () => {
+      navigate("/privacypolicy");
+    }
+
     const login = useGoogleLogin({
         onSuccess: (codeResponse) => {
             console.log(codeResponse);
@@ -225,7 +230,7 @@ const SignIn = (props) => {
             <br></br>
             <MainDiv>
                 <RandTextDiv>
-                    <P>Sign in or <u onClick={navToSignUp}><b>create an account</b></u></P>
+                    <P>Sign in or <u onClick={navToSignUp}><b style={{cursor: "pointer"}}>create an account</b></u></P>
                 </RandTextDiv>
                 <RandTextDiv>
                     {errors.googleSignUp && <P style={{color: "red"}}>{errors.googleSignUp}</P>}
@@ -274,7 +279,7 @@ const SignIn = (props) => {
                     <ButtonDiv>
                         <SearchButtonDiv>
                             <MyButton
-                                backgroundColor="#000000"
+                                backgroundColor={`${COLORS.ORANGE}`}
                                 color="#FFFFFF"
                                 text="Sign In"
                                 width="100%"
@@ -300,6 +305,9 @@ const SignIn = (props) => {
                     </ButtonDiv>
                 </form>
             </MainDiv>
+            <Footer>
+                <UP onClick={navToPrivacyPolicy}>Privacy policy & Terms of use</UP>
+            </Footer>
         </div>
     )
 }

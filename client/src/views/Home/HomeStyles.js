@@ -5,10 +5,24 @@ export const H1 = styled.h1`
     color: red;
 `;
 
+export const Footer = styled.div`
+    background-color: ${COLORS.BACK};
+    height: 60px;
+    justify-content: center;
+    align-items: center;
+`;
+
 export const P = styled.p`
   text-align: center;
   font-size: x-small;
   margin-top: 12px;
+`;
+
+export const UP = styled.p`
+  font-size: small;
+  color: #000000;
+  text-decoration: underline;
+  cursor: pointer;
 `;
 
 export const SP = styled.p`

@@ -1,26 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { 
     BottomLeftDiv, BottomRightDiv, CheckIcon, CompanyNameDiv, 
-    DescriptionSummaryDiv, GraySP, IconDiv, JobDiv, LP, LocationDiv, NNSP, NSP, Overlay, P, PayDiv, 
+    DescriptionSummaryDiv, GraySP, IconDiv, JobDiv, LP, LocationDiv, Overlay, P, 
     PopUp,SP, TitleDiv, TopLeftDiv, Wrapper 
 } from './JobPostStyles';
 import { MdPlace } from 'react-icons/md';
 import { 
-    FaClock,
-    FaMoneyBill,
-    FaCircle
+    FaClock
 } from 'react-icons/fa';
 import { FaExpand } from 'react-icons/fa';
 import { GiHourglass } from 'react-icons/gi';
 import { AiOutlineClockCircle } from 'react-icons/ai';
-import { FiClock } from 'react-icons/fi';
 import { 
     IoIosArrowForward,
-    IoMdArrowBack
 } from 'react-icons/io';
 import { formatDistanceToNow, parseISO } from 'date-fns';
-import CurrencyConverter from '../CurrencyConverter/CurrencyConverter';
 import PopUpJobPost from '../PopUpJobPost/PopUpJobPost';
 import { COLORS } from '../../constants/colors';
 
