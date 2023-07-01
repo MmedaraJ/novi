@@ -77,6 +77,7 @@ export const OurJobsDiv = styled.div`
     cursor: pointer;
     background-color: ${({onFirstTab}) => (onFirstTab ? `${COLORS.ORANGE}` : `${COLORS.LIGHT_ORANGE}`)}; 
     font-weight: ${({onFirstTab}) => (onFirstTab ? "bold" : "normal")}; 
+    color: ${({onFirstTab}) => (onFirstTab ? "white" : "black")}; 
 `;
 
 export const TheirJobsDiv = styled.div`
@@ -85,4 +86,5 @@ export const TheirJobsDiv = styled.div`
     cursor: pointer;
     background-color: ${({onFirstTab}) => (onFirstTab ? `${COLORS.LIGHT_ORANGE}` : `${COLORS.ORANGE}`)};
     font-weight: ${({onFirstTab}) => (onFirstTab ? "normal" : "bold")}; 
+    color: ${({onFirstTab}) => (onFirstTab ? "black" : "white")}; 
 `;

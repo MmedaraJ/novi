@@ -148,6 +148,10 @@ const NavBar = (props) => {
         navigate('/');
     }
 
+    const navToEmployer = () => {
+        navigate('/employer');
+    }
+
   return (
     <MainDiv>
         <LogoDiv onClick={navToHome}>
@@ -197,7 +201,7 @@ const NavBar = (props) => {
                 )
             }
         </ItemsDiv>
-        <EmployerDiv>
+        <EmployerDiv onClick={navToEmployer}>
             <P>EMPLOYER</P>
         </EmployerDiv>
         <Hamburger onClick={toggleMenu}>
@@ -213,7 +217,7 @@ const NavBar = (props) => {
                 (<MenuItem onClick={navToSignIn}><PP>SIGN IN</PP></MenuItem>):
                 (<MenuItem onClick={navToProfile}><PP>PROFILE</PP></MenuItem>)
             }
-            <MenuItem><PP>EMPLOYER</PP></MenuItem>
+            <MenuItem onClick={navToEmployer}><PP>EMPLOYER</PP></MenuItem>
             {isLoggedIn && <MenuItem onClick={logUserOut}><PP>SIGN OUT</PP></MenuItem>}
         </Menu>
     </MainDiv>
